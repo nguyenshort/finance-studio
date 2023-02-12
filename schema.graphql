@@ -1,0 +1,293 @@
+"""Exposes a URL that specifies the behavior of this scalar."""
+directive @specifiedBy(
+  """The URL that specifies the behavior of this scalar."""
+  url: String!
+) on SCALAR
+
+"""
+Direct the client to resolve this field locally, either from the cache or local resolvers.
+"""
+directive @client(
+  """
+  When true, the client will never use the cache for this value. See
+  https://www.apollographql.com/docs/react/essentials/local-state/#forcing-resolvers-with-clientalways-true
+  """
+  always: Boolean
+) on FIELD | FRAGMENT_DEFINITION | INLINE_FRAGMENT
+
+"""
+Export this locally resolved field as a variable to be used in the remainder of this query. See
+https://www.apollographql.com/docs/react/essentials/local-state/#using-client-fields-as-variables
+"""
+directive @export(
+  """The variable name to export this field as."""
+  as: String!
+) on FIELD
+
+"""
+Specify a custom store key for this result. See
+https://www.apollographql.com/docs/react/advanced/caching/#the-connection-directive
+"""
+directive @connection(
+  """Specify the store key."""
+  key: String!
+
+  """
+  An array of query argument names to include in the generated custom store key.
+  """
+  filter: [String!]
+) on FIELD
+
+type Bank {
+  account: String!
+  bank: String!
+  createdAt: Float!
+  id: ID!
+  name: String!
+  updatedAt: Float!
+  user: User!
+}
+
+type Collaborator {
+  clients: [User!]!
+  createdAt: Float!
+  fanpage: String!
+  id: ID!
+  name: String!
+  status: COLLABORATOR_STATUS!
+  updatedAt: Float!
+}
+
+enum COLLABORATOR_STATUS {
+  ACTIVE
+  FULL
+  INACTIVE
+}
+
+input CreateCollaboratorInput {
+  fanpage: String!
+  name: String!
+}
+
+input CreateLanguageInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreateLoanInput {
+  amount: Float!
+  interest: Float!
+  months: Int!
+}
+
+input CreateLogbookInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input GetCollaboratorsFilter {
+  limit: Int!
+  name: String
+  offset: Int!
+
+  """Sắp xếp của bình luận"""
+  sort: String!
+}
+
+input GetUsersFilter {
+  email: String
+  exclude: [ID!] = []
+  limit: Int!
+  name: String
+  offset: Int!
+
+  """Sắp xếp của bình luận"""
+  sort: String!
+}
+
+type Identity {
+  avatar: String!
+  back: String!
+  createdAt: Float!
+  front: String!
+  id: ID!
+  updatedAt: Float!
+  user: User!
+}
+
+type Info {
+  address: String!
+  born: [Float!]!
+  cccd: String!
+  createdAt: Float!
+  education: String!
+  id: ID!
+  income: String!
+  job: String!
+  marriage: String!
+  name: String!
+  purpose: String!
+  updatedAt: Float!
+  user: User!
+}
+
+type Language {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Loan {
+  """Số Tiền Vay"""
+  amount: Float!
+  createdAt: Float!
+  id: ID!
+
+  """Lãi xuất"""
+  interest: Float!
+
+  """Thời Gian Vay"""
+  months: Int!
+
+  """Image chữ ký"""
+  signature: String!
+
+  """Trạng thái khoản vay"""
+  status: LoanStatus!
+  updatedAt: Float!
+  user: User!
+}
+
+enum LoanStatus {
+  APPROVED
+  PENDING
+  REJECTED
+}
+
+type Logbook {
+  amount: Float!
+  content: String
+  createdAt: Float!
+
+  """Nhóm trạng thái"""
+  group: LOGBOOK_STATUS!
+  id: ID!
+  note: String
+  updatedAt: Float!
+  user: User!
+}
+
+enum LOGBOOK_STATUS {
+  LOAN
+}
+
+type Mutation {
+  createCollaborator(input: CreateCollaboratorInput!): Collaborator!
+  createLanguage(createLanguageInput: CreateLanguageInput!): Language!
+  createLoan(input: CreateLoanInput!): Loan!
+  createLogbook(createLogbookInput: CreateLogbookInput!): Logbook!
+  removeLanguage(id: Int!): Language!
+  removeLogbook(id: Int!): Logbook!
+  signLoan(input: SignLoanInput!): Loan!
+  updateBank(input: UpdateBankInput!): Bank!
+  updateCollaborator(input: UpdateCollaboratorInput!): Collaborator!
+  updateIdentity(input: UpdateIdentityInput!): Identity!
+  updateInfo(input: UpdateInfoInput!): Info!
+  updateLanguage(updateLanguageInput: UpdateLanguageInput!): Language!
+  updateLogbook(updateLogbookInput: UpdateLogbookInput!): Logbook!
+}
+
+type Notify {
+  """Thông báo lỗi hay không"""
+  error: Boolean!
+
+  """Nội dung tin nhắn"""
+  msg: String!
+
+  """Thành viên hiện tại"""
+  user: User!
+}
+
+type Query {
+  bank: Bank
+  collaborators(filter: GetCollaboratorsFilter!): [Collaborator!]!
+  identity: Identity
+  info: Info
+  language(id: Int!): Language!
+  loan: Loan
+  logbook(id: Int!): Logbook!
+  me: User!
+  users(filter: GetUsersFilter!): [User!]!
+}
+
+input SignLoanInput {
+  signature: String!
+}
+
+type Subscription {
+  """Nhận thông báo"""
+  subNotify: Notify!
+}
+
+input UpdateBankInput {
+  account: String!
+  bank: String!
+  name: String!
+}
+
+input UpdateCollaboratorInput {
+  fanpage: String
+  id: ID!
+  name: String
+  status: COLLABORATOR_STATUS
+}
+
+input UpdateIdentityInput {
+  avatar: String!
+  back: String!
+  front: String!
+}
+
+input UpdateInfoInput {
+  address: String!
+  born: [Float!]!
+  cccd: String!
+  education: String!
+  income: String!
+  job: String!
+  marriage: String!
+  name: String!
+  purpose: String!
+}
+
+input UpdateLanguageInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input UpdateLogbookInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+type User {
+  avatar: String
+  balance: Float!
+  collaborator: User
+  createdAt: Float!
+  email: String
+  id: ID!
+  name: String!
+  role: UserRole!
+  slug: String!
+
+  """Firebase ID"""
+  uid: String!
+}
+
+enum UserRole {
+  ADMIN
+  SP_ADMIN
+  USER
+}

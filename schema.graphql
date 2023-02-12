@@ -85,6 +85,10 @@ input CreateLogbookInput {
   exampleField: Int!
 }
 
+input GetCollaboratorFilter {
+  id: ID!
+}
+
 input GetCollaboratorsFilter {
   limit: Int!
   name: String
@@ -209,6 +213,7 @@ type Notify {
 
 type Query {
   bank: Bank
+  collaborator(filter: GetCollaboratorFilter!): Collaborator!
   collaborators(filter: GetCollaboratorsFilter!): [Collaborator!]!
   identity: Identity
   info: Info
@@ -278,6 +283,7 @@ type User {
   createdAt: Float!
   email: String
   id: ID!
+  loan: Loan
   name: String!
   role: UserRole!
   slug: String!

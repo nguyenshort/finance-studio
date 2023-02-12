@@ -76,7 +76,7 @@ import {
   GetCollaboratorsVariables
 } from "~/apollo/queries/__generated__/GetCollaborators";
 import {GET_COLLABORATORS} from "~/apollo/queries/collaborator.query";
-import {NSpace} from "#components"
+import {NSpace, NuxtLink} from "#components"
 import {UpdateCollaborator, UpdateCollaboratorVariables} from "~/apollo/mutates/__generated__/UpdateCollaborator";
 import {TOGGLE_COLLABORATOR, UPDATE_COLLABORATOR} from "~/apollo/mutates/collaborator.mutate";
 import {ToggleCollaborator} from "~/apollo/mutates/__generated__/ToggleCollaborator";
@@ -146,7 +146,10 @@ const getRowKey = (user: GetCollaborators_collaborators) => user.id
 const columns = ref<DataTableColumns<GetCollaborators_collaborators>>([
   {
     title: 'Tên',
-    key: 'name'
+    key: 'name',
+    render(row) {
+      return h(NuxtLink, {to: `/collaborators/${row.id}`}, {default: () => row.name})
+    }
   },
   {
     title: 'Fanpage',

@@ -36,6 +36,10 @@ export interface CreateLoanInput {
   months: number;
 }
 
+export interface GetCollaboratorFilter {
+  id: string;
+}
+
 export interface GetCollaboratorsFilter {
   limit: number;
   name?: string | null;

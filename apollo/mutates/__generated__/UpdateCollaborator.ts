@@ -12,6 +12,8 @@ import { UpdateCollaboratorInput, COLLABORATOR_STATUS } from "./../../__generate
 export interface UpdateCollaborator_updateCollaborator {
   __typename: "Collaborator";
   id: string;
+  name: string;
+  fanpage: string;
   status: COLLABORATOR_STATUS;
 }
 

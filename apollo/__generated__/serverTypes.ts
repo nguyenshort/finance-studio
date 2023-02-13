@@ -47,6 +47,14 @@ export interface GetCollaboratorsFilter {
   sort: string;
 }
 
+export interface GetInfoFilter {
+  id: string;
+}
+
+export interface GetUserFilter {
+  id: string;
+}
+
 export interface GetUsersFilter {
   email?: string | null;
   exclude?: string[] | null;
@@ -80,15 +88,16 @@ export interface UpdateIdentityInput {
 }
 
 export interface UpdateInfoInput {
-  address: string;
-  born: number[];
-  cccd: string;
-  education: string;
-  income: string;
-  job: string;
-  marriage: string;
-  name: string;
-  purpose: string;
+  address?: string | null;
+  born?: number[] | null;
+  cccd?: string | null;
+  education?: string | null;
+  income?: string | null;
+  job?: string | null;
+  marriage?: string | null;
+  name?: string | null;
+  purpose?: string | null;
+  user: string;
 }
 
 //==============================================================

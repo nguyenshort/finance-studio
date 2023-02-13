@@ -1,10 +1,18 @@
 import { gql } from '#imports'
 
 export const UPDATE_INFO = gql`
-  ${INFO_DOC}
-  mutation UpdateInfo($input: UpdateInfoInput!) {
-    updateInfo(input: $input) {
-      ...InfoDoc
+  mutation AdminUpdateInfo($input: UpdateInfoInput!) {
+    adminUpdateInfo(input: $input) {
+      id
+      name
+      born
+      cccd
+      address
+      education
+      income
+      job
+      marriage
+      purpose
     }
   }
 `

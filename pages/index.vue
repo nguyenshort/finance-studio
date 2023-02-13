@@ -48,9 +48,9 @@ const register = async () =>
   }
 }
 const onSubmit = async () => {
-  showLoadingToast('')
+  // showLoadingToast('')
   await register()
-  closeToast()
+  // closeToast()
 }
 
 

@@ -4,9 +4,10 @@
       <n-space vertical size="large">
       <n-layout position="absolute" :class="[showUI ? '' : 'opacity-0']">
         <n-layout-header style="height: 64px; padding:0 24px" bordered>
-          <div class="flex items-center justify-between h-full">
-            <h1>Financial 247</h1>
-            <div id="actions"></div>
+          <div class="flex items-center h-full">
+            <h1 class="w-[216px] flex-shrink-0">Financial 247</h1>
+            <div id="tabs" class="w-full h-full flex items-center"></div>
+            <div id="actions" class="flex-shrink-0"></div>
           </div>
         </n-layout-header>
         <n-layout has-sider position="absolute" style="top: 64px">

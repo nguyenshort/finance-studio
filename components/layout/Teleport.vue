@@ -6,7 +6,7 @@
 
 <script lang="ts" setup>
 defineProps<{
-  to: string
+  to: '#actions' | '#tabs'
 }>()
 
 const [show, toggleShow] = useToggle(false)

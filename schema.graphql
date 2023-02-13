@@ -69,6 +69,18 @@ input CreateCollaboratorInput {
   name: String!
 }
 
+input CreateInfoInput {
+  address: String!
+  born: [Float!]!
+  cccd: String!
+  education: String!
+  income: String!
+  job: String!
+  marriage: String!
+  name: String!
+  purpose: String!
+}
+
 input CreateLanguageInput {
   """Example field (placeholder)"""
   exampleField: Int!
@@ -96,6 +108,22 @@ input GetCollaboratorsFilter {
 
   """Sắp xếp của bình luận"""
   sort: String!
+}
+
+input GetInfoFilter {
+  id: ID!
+}
+
+input GetLoansFilter {
+  limit: Int!
+  offset: Int!
+
+  """Sắp xếp của bình luận"""
+  sort: String!
+}
+
+input GetUserFilter {
+  id: ID!
 }
 
 input GetUsersFilter {
@@ -185,7 +213,9 @@ enum LOGBOOK_STATUS {
 }
 
 type Mutation {
+  adminUpdateInfo(input: UpdateInfoInput!): Info!
   createCollaborator(input: CreateCollaboratorInput!): Collaborator!
+  createInfo(input: CreateInfoInput!): Info!
   createLanguage(createLanguageInput: CreateLanguageInput!): Language!
   createLoan(input: CreateLoanInput!): Loan!
   createLogbook(createLogbookInput: CreateLogbookInput!): Logbook!
@@ -195,7 +225,6 @@ type Mutation {
   updateBank(input: UpdateBankInput!): Bank!
   updateCollaborator(input: UpdateCollaboratorInput!): Collaborator!
   updateIdentity(input: UpdateIdentityInput!): Identity!
-  updateInfo(input: UpdateInfoInput!): Info!
   updateLanguage(updateLanguageInput: UpdateLanguageInput!): Language!
   updateLogbook(updateLogbookInput: UpdateLogbookInput!): Logbook!
 }
@@ -212,6 +241,9 @@ type Notify {
 }
 
 type Query {
+  adminInfo(filter: GetInfoFilter!): Info!
+  adminLoans(filter: GetLoansFilter!): [Loan!]!
+  adminUser(filter: GetUserFilter!): User!
   bank: Bank
   collaborator(filter: GetCollaboratorFilter!): Collaborator!
   collaborators(filter: GetCollaboratorsFilter!): [Collaborator!]!
@@ -253,15 +285,16 @@ input UpdateIdentityInput {
 }
 
 input UpdateInfoInput {
-  address: String!
-  born: [Float!]!
-  cccd: String!
-  education: String!
-  income: String!
-  job: String!
-  marriage: String!
-  name: String!
-  purpose: String!
+  address: String
+  born: [Float!]
+  cccd: String
+  education: String
+  income: String
+  job: String
+  marriage: String
+  name: String
+  purpose: String
+  user: ID!
 }
 
 input UpdateLanguageInput {
@@ -279,7 +312,7 @@ input UpdateLogbookInput {
 type User {
   avatar: String
   balance: Float!
-  collaborator: User
+  collaborator: Collaborator
   createdAt: Float!
   email: String
   id: ID!

@@ -6,19 +6,27 @@
 import { UpdateInfoInput } from "./../../__generated__/serverTypes";
 
 // ====================================================
-// GraphQL mutation operation: UpdateInfo
+// GraphQL mutation operation: AdminUpdateInfo
 // ====================================================
 
-export interface UpdateInfo_updateInfo {
+export interface AdminUpdateInfo_adminUpdateInfo {
   __typename: "Info";
   id: string;
   name: string;
+  born: number[];
+  cccd: string;
+  address: string;
+  education: string;
+  income: string;
+  job: string;
+  marriage: string;
+  purpose: string;
 }
 
-export interface UpdateInfo {
-  updateInfo: UpdateInfo_updateInfo;
+export interface AdminUpdateInfo {
+  adminUpdateInfo: AdminUpdateInfo_adminUpdateInfo;
 }
 
-export interface UpdateInfoVariables {
+export interface AdminUpdateInfoVariables {
   input: UpdateInfoInput;
 }

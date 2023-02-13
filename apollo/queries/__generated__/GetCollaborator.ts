@@ -28,6 +28,14 @@ export interface GetCollaborator_collaborator_clients_loan {
    * Trạng thái khoản vay
    */
   status: LoanStatus;
+  createdAt: number;
+}
+
+export interface GetCollaborator_collaborator_clients_info {
+  __typename: "Info";
+  id: string;
+  name: string;
+  cccd: string;
 }
 
 export interface GetCollaborator_collaborator_clients {
@@ -37,6 +45,7 @@ export interface GetCollaborator_collaborator_clients {
   email: string | null;
   balance: number;
   loan: GetCollaborator_collaborator_clients_loan | null;
+  info: GetCollaborator_collaborator_clients_info | null;
   createdAt: number;
 }
 

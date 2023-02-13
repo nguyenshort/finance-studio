@@ -283,6 +283,7 @@ type User {
   createdAt: Float!
   email: String
   id: ID!
+  info: Info
   loan: Loan
   name: String!
   role: UserRole!

@@ -16,26 +16,32 @@ export const GET_COLLABORATORS = gql`
 `
 
 export const GET_COLLABORATOR = gql`
-  query GetCollaborator($filter: GetCollaboratorFilter!) {
-    collaborator(filter: $filter) {
-      id
-      name
-      status
-      clients {
-        id
-        name
-        email
-        balance
-        loan {
-          id
-          signature
-          amount
-          months
-          status
+    query GetCollaborator($filter: GetCollaboratorFilter!) {
+        collaborator(filter: $filter) {
+            id
+            name
+            status
+            clients {
+                id
+                name
+                email
+                balance
+                loan {
+                    id
+                    signature
+                    amount
+                    months
+                    status
+                    createdAt
+                }
+                info {
+                    id
+                    name
+                    cccd
+                }
+                createdAt
+            }
+            fanpage
         }
-        createdAt
-      }
-      fanpage
     }
-  }
 `

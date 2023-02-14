@@ -25,15 +25,18 @@ export enum UserRole {
   USER = "USER",
 }
 
+export interface AdminUpdateUserInput {
+  avatar?: string | null;
+  balance?: number | null;
+  collaborator?: string | null;
+  name?: string | null;
+  role?: UserRole | null;
+  user: string;
+}
+
 export interface CreateCollaboratorInput {
   fanpage: string;
   name: string;
-}
-
-export interface CreateLoanInput {
-  amount: number;
-  interest: number;
-  months: number;
 }
 
 export interface GetCollaboratorFilter {
@@ -68,10 +71,6 @@ export interface GetUsersFilter {
   sort: string;
 }
 
-export interface SignLoanInput {
-  signature: string;
-}
-
 export interface UpdateBankInput {
   account: string;
   bank: string;
@@ -101,6 +100,13 @@ export interface UpdateInfoInput {
   marriage?: string | null;
   name?: string | null;
   purpose?: string | null;
+  user: string;
+}
+
+export interface UpdateLoanInput {
+  amount?: number | null;
+  interest?: number | null;
+  months?: number | null;
   user: string;
 }
 

@@ -99,6 +99,13 @@ import {
 } from "~/apollo/queries/__generated__/formCollaborators";
 import {SignaturePadEntity} from "~/entities/signature-pad.entity";
 import {Options} from "signature_pad/src/signature_pad";
+import {UPDATE_LOAN} from "~/apollo/mutates/loan.mutate";
+import {AdminUpdateLoan, AdminUpdateLoanVariables} from "~/apollo/mutates/__generated__/AdminUpdateLoan";
+import {CHANGE_COLLABORATOR} from "~/apollo/mutates/user.mutate";
+import {
+  AdminUpdateUserCollaborator,
+  AdminUpdateUserCollaboratorVariables
+} from "~/apollo/mutates/__generated__/AdminUpdateUserCollaborator";
 
 const props = defineProps<{
   initData: AdminLoan_adminLoan
@@ -120,7 +127,7 @@ const collaborators = computed<FormCollaborators_collaborators[]>(() => result.v
 /**
  * Section: Form
  */
-const form = ref<AdminLoan_adminLoan>(toRaw(props.initData))
+const form = ref<AdminLoan_adminLoan>(JSON.parse(JSON.stringify(props.initData)))
 const formRef = ref<FormInst>()
 // convert rules from interface AdminLoan_adminLoan
 const rules = computed<FormRules>(() => ({
@@ -188,15 +195,6 @@ const collaboratorsOptions = computed<SelectMixedOption[]>(() => {
   }))
 })
 
-const submit = () => {
-  formRef.value?.validate((errors) => {
-    if (errors) {
-      return message.error('Vui lòng nhập đầy đủ thông tin')
-    }
-    console.log(form.value)
-  })
-}
-
 
 const signaturePadRef = ref<SignaturePadEntity|undefined>()
 const signaturePadOptions = computed<Options>(() => ({
@@ -221,6 +219,36 @@ const insertNewSignature = async () => {
   }
   toggleSignatureModal()
   loadingUpload.value = false
+}
+
+
+/**
+ * Section: Update Loan
+ */
+const { mutate: updateLoan, loading: updatingLoan } = useMutation<AdminUpdateLoan, AdminUpdateLoanVariables>(UPDATE_LOAN)
+const { mutate: updateCollaborator, loading: updatingCollaborator } = useMutation<AdminUpdateUserCollaborator, AdminUpdateUserCollaboratorVariables>(CHANGE_COLLABORATOR)
+const submit = () => {
+  formRef.value?.validate((errors) => {
+    if (errors) {
+      return message.error('Vui lòng nhập đầy đủ thông tin')
+    }
+    updateLoan({
+      input: {
+        user: form.value.user.id,
+        amount: form.value.amount,
+        interest: form.value.interest,
+        months: form.value.months
+      }
+    })
+    if(form.value.user.collaborator?.id !== props.initData.user.collaborator?.id) {
+      updateCollaborator({
+        input: {
+          user: form.value.user.id,
+          collaborator: form.value.user.collaborator?.id
+        }
+      })
+    }
+  })
 }
 </script>
 

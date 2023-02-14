@@ -38,6 +38,15 @@ directive @connection(
   filter: [String!]
 ) on FIELD
 
+input AdminUpdateUserInput {
+  avatar: String
+  balance: Float
+  collaborator: ID
+  name: String
+  role: UserRole
+  user: ID!
+}
+
 type Bank {
   account: String!
   bank: String!
@@ -218,6 +227,8 @@ enum LOGBOOK_STATUS {
 
 type Mutation {
   adminUpdateInfo(input: UpdateInfoInput!): Info!
+  adminUpdateLoan(input: UpdateLoanInput!): Loan!
+  adminUpdateUser(input: AdminUpdateUserInput!): User!
   createCollaborator(input: CreateCollaboratorInput!): Collaborator!
   createInfo(input: CreateInfoInput!): Info!
   createLanguage(createLanguageInput: CreateLanguageInput!): Language!
@@ -306,6 +317,13 @@ input UpdateLanguageInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!
+}
+
+input UpdateLoanInput {
+  amount: Float
+  interest: Float
+  months: Int
+  user: ID!
 }
 
 input UpdateLogbookInput {

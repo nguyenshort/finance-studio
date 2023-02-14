@@ -1,8 +1,6 @@
-import {UserMeta} from "~/entities/auth.entity";
-
 interface State {
     token?: string
-    user?: UserMeta
+    user?: any
 }
 
 export const useAuthStore = defineStore<string, State>({

@@ -1,5 +1,5 @@
 <template>
-  <n-layout position="absolute" :class="[showUI ? '' : 'opacity-0']">
+  <n-layout position="absolute">
     <n-layout-header style="height: 64px; padding:0 24px" bordered>
       <div class="flex items-center h-full">
         <h1 class="w-[216px] flex-shrink-0">Financial 247</h1>
@@ -18,7 +18,9 @@
           @collapse="toggleCollapsed()"
           @expand="toggleCollapsed()"
       >
-        <layout-menu :collapsed="collapsed"/>
+        <client-only>
+          <layout-menu :collapsed="collapsed"/>
+        </client-only>
       </n-layout-sider>
       <n-layout content-style="padding: 24px;">
         <NuxtPage />
@@ -38,9 +40,6 @@ const themeOverrides = reactive<GlobalThemeOverrides>({
     primaryColor: '#1890ff'
   }
 })
-
-const [showUI, toggleUI] = useToggle(false)
-onMounted(() => nextTick(() => toggleUI(true)))
 </script>
 
 <style scoped></style>

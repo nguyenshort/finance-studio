@@ -9,6 +9,12 @@ import { GetUsersFilter, UserRole } from "./../../__generated__/serverTypes";
 // GraphQL query operation: GetUsers
 // ====================================================
 
+export interface GetUsers_users_collaborator {
+  __typename: "Collaborator";
+  id: string;
+  name: string;
+}
+
 export interface GetUsers_users {
   __typename: "User";
   id: string;
@@ -16,6 +22,7 @@ export interface GetUsers_users {
   email: string | null;
   role: UserRole;
   balance: number;
+  collaborator: GetUsers_users_collaborator | null;
 }
 
 export interface GetUsers {

@@ -15,6 +15,9 @@
 import {PaginationProps} from "naive-ui/es/pagination/src/Pagination"
 import {DataTableColumns, NButton, NTag} from "naive-ui"
 import {GetUsers, GetUsers_users, GetUsersVariables} from "~/apollo/queries/__generated__/GetUsers"
+import { NuxtLink } from "#components"
+
+const router = useRouter()
 
 const filter = reactive<GetUsersVariables>({
   filter: {
@@ -29,11 +32,26 @@ const getRowKey = (user: GetUsers_users) => user.id
 const columns = ref<DataTableColumns<GetUsers_users>>([
   {
     title: 'Tên',
-    key: 'name'
+    key: 'name',
+    render(row) {
+      return h(
+          NuxtLink,
+          {
+            to: {
+              name: 'users-id',
+              params: {
+                id: row.id
+              }
+            }
+          },
+          { default: () => row.name }
+      )
+    }
   },
   {
     title: 'Số Dư',
-    key: 'balance'
+    key: 'balance',
+    sorter: (row1, row2) => row1.balance - row2.balance
   },
   {
     title: 'Số Điện Thoại',
@@ -56,7 +74,29 @@ const columns = ref<DataTableColumns<GetUsers_users>>([
   },
   {
     title: 'Cộng Tác Viên',
-    key: 'tags',
+    key: 'collaborator',
+    render(row) {
+      return !row.collaborator ? '' : h(
+          NTag,
+          {
+            style: {
+              marginRight: '6px'
+            },
+            type: 'success',
+            bordered: false,
+            // click to
+            onClick: () => router.push({
+              name: 'collaborators-id',
+              params: {
+                id: row.collaborator!.id
+              }
+            })
+          },
+          {
+            default: () => row.collaborator?.name
+          }
+      )
+    }
   },
   {
     title: 'Action',

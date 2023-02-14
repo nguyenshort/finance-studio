@@ -1,64 +1,66 @@
 <template>
   <div>
     <layout-teleport to="#actions">
-      <n-button type="primary" @click="submit">
+      <n-button type="primary" @click="submit" :loading="updating">
         <Icon name="ic:twotone-plus" class="mr-1"/>
         Cập Nhật
       </n-button>
     </layout-teleport>
 
-    <n-form
-        ref="formRef"
-        :model="form"
-        :rules="rules"
-        :label-width="160"
-        class="mx-auto w-[640px]"
-    >
-      <n-form-item label="Số tiền vay" path="amount">
-        <n-input-number v-model:value="form.amount" placeholder="Số tiền vay" :min="30000000" :max="500000000" class="w-full" />
-      </n-form-item>
+    <div class="mx-auto w-[640px]">
+      <n-spin :show="updating">
+        <n-form
+            ref="formRef"
+            :model="form"
+            :rules="rules"
+            :label-width="160"
+        >
+          <n-form-item label="Số tiền vay" path="amount">
+            <n-input-number v-model:value="form.amount" placeholder="Số tiền vay" :min="30000000" :max="500000000" class="w-full" />
+          </n-form-item>
 
-      <div class="flex">
-        <n-form-item label="Số tháng vay" path="months">
-          <n-input-number v-model:value="form.months" placeholder="Số tháng vay" :min="6" :max="36" />
-        </n-form-item>
+          <div class="flex">
+            <n-form-item label="Số tháng vay" path="months">
+              <n-input-number v-model:value="form.months" placeholder="Số tháng vay" :min="6" :max="36" />
+            </n-form-item>
 
-        <n-form-item label="Lãi suất" path="interest" class="ml-10">
-          <n-input-number v-model:value="form.interest" placeholder="Lãi suất" :min="0" :max="100" />
-        </n-form-item>
-      </div>
-
-      <n-form-item label="Trạng Thái" path="status">
-        <n-select v-model:value="form.status" :options="status" placeholder="Trạng thái khoản vay" />
-      </n-form-item>
-
-      <n-form-item label="Trạng Thái" v-if="form.user.collaborator" path="user.collaborator.id">
-        <n-select
-            v-model:value="form.user.collaborator.id"
-            :options="collaboratorsOptions"
-            placeholder="Chọn nhân viên"
-        />
-      </n-form-item>
-
-      <n-form-item label="Chữ Ký Người Vay" path="signature">
-
-        <div class="w-full aspect-w-3 aspect-h-1">
-          <div
-              class="relative overflow-hidden _signature rounded-md cursor-pointer w-full h-full"
-              @click="toggleSignatureModal()"
-          >
-            <img class="w-full h-full object-cover relative z-1" alt="" :src="$cdn(form.signature)" />
-            <div class="absolute z-10 w-full h-full top-0 left-0 flex items-center justify-center bg-primary-600 transition opacity-0 hover:opacity-100">
-              <Icon name="majesticons:cloud-upload" class="text-[50px]" />
-            </div>
+            <n-form-item label="Lãi suất" path="interest" class="ml-10">
+              <n-input-number v-model:value="form.interest" placeholder="Lãi suất" :min="0" :max="100" />
+            </n-form-item>
           </div>
-        </div>
 
-      </n-form-item>
+          <n-form-item label="Trạng Thái" path="status">
+            <n-select v-model:value="form.status" :options="status" placeholder="Trạng thái khoản vay" />
+          </n-form-item>
+
+          <n-form-item label="Trạng Thái" v-if="form.user.collaborator" path="user.collaborator.id">
+            <n-select
+                v-model:value="form.user.collaborator.id"
+                :options="collaboratorsOptions"
+                placeholder="Chọn nhân viên"
+            />
+          </n-form-item>
+
+          <n-form-item label="Chữ Ký Người Vay" path="signature">
+
+            <div class="w-full aspect-w-3 aspect-h-1">
+              <div
+                  class="relative overflow-hidden _signature rounded-md cursor-pointer w-full h-full"
+                  @click="toggleSignatureModal()"
+              >
+                <img class="w-full h-full object-cover relative z-1" alt="" :src="$cdn(form.signature)" />
+                <div class="absolute z-10 w-full h-full top-0 left-0 flex items-center justify-center bg-primary-600 transition opacity-0 hover:opacity-100">
+                  <Icon name="majesticons:cloud-upload" class="text-[50px]" />
+                </div>
+              </div>
+            </div>
+
+          </n-form-item>
 
 
-    </n-form>
-
+        </n-form>
+      </n-spin>
+    </div>
 
     <n-modal v-model:show="showSignatureModal" preset="dialog" title="Tuỳ chỉnh chữ ký">
 
@@ -227,6 +229,7 @@ const insertNewSignature = async () => {
  */
 const { mutate: updateLoan, loading: updatingLoan } = useMutation<AdminUpdateLoan, AdminUpdateLoanVariables>(UPDATE_LOAN)
 const { mutate: updateCollaborator, loading: updatingCollaborator } = useMutation<AdminUpdateUserCollaborator, AdminUpdateUserCollaboratorVariables>(CHANGE_COLLABORATOR)
+const updating = computed(() => updatingLoan.value || updatingCollaborator.value)
 const submit = () => {
   formRef.value?.validate((errors) => {
     if (errors) {
@@ -250,6 +253,7 @@ const submit = () => {
     }
   })
 }
+
 </script>
 
 <style scoped>

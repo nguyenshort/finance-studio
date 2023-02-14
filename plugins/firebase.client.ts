@@ -49,6 +49,10 @@ export default defineNuxtPlugin(nuxtApp => {
                         })
                         if(token) {
 
+                            if(window && route.name === 'index') {
+                                return window.location.href = '/discovery'
+                            }
+
                             const { user } = await $fetch('/api/me', {
                                 headers: {
                                     Authorization: 'Bearer ' + token

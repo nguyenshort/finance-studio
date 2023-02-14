@@ -13,8 +13,9 @@
 
 <script lang="ts" setup>
 import {MenuOption} from "naive-ui"
-import { Icon } from '#components'
+import { Icon, NuxtLink } from '#components'
 import { NIcon } from 'naive-ui'
+import { signOut } from "firebase/auth"
 
 defineProps<{
   collapsed: boolean
@@ -26,30 +27,95 @@ const renderMenuIcon = (option: MenuOptionWithIcon) => {
   return h(NIcon, null, { default: () => h(Icon, { name: option.icon_name }) })
 }
 
-const menuOptions: MenuOptionWithIcon[] = [
+const router = useRouter()
+const authStore = useAuthStore()
+
+const logOut = async (e: Event) => {
+  e.preventDefault()
+  await $fetch('/api/logout', { method: 'POST' })
+  await signOut(faAuth())
+  window.location.href = '/'
+}
+
+const menuOptions = computed<MenuOptionWithIcon[]>(() => [
   {
-    label: 'Tổng Quan',
+    label: () => h(
+        NuxtLink,
+        {
+          to: {
+            name: 'index'
+          }
+        },
+        { default: () => 'Tổng Quan' }
+    ),
     key: 'discovery',
     icon_name: 'icon-park-outline:browser-safari'
   },
   {
-    label: 'Khoản Vay',
+    label: () => h(
+        NuxtLink,
+        {
+          to: {
+            name: 'loans'
+          }
+        },
+        { default: () => 'Khoản Vay' }
+    ),
     key: 'loans',
     icon_name: 'ri:money-pound-circle-line'
   },
   {
-    label: 'Cộng Tác Viên',
+    label: () => h(
+        NuxtLink,
+        {
+          to: {
+            name: 'collaborators'
+          }
+        },
+        { default: () => 'Cộng Tác Viên' }
+    ),
     key: 'collaborators',
     icon_name: 'majesticons:support-line'
   },
   {
-    label: 'Người Dùng',
+    label: () => h(
+        NuxtLink,
+        {
+          to: {
+            name: 'users'
+          }
+        },
+        { default: () => 'Thành Viên' }
+    ),
     key: 'users',
     icon_name: 'ri:user-4-line'
+  },
+  {
+    label: () => h(
+        'a',
+        {
+          href: '#',
+          onClick: logOut
+        },
+        { default: () => 'Đăng Xuất' }
+    ),
+    key: 'out',
+    icon_name: 'majesticons:logout-half-circle'
   }
-]
+])
 
-const selectedKey = ref('user')
+const route = useRoute()
+const selectedKey = computed({
+  get: () => {
+    // match by regex first
+    if(/^\/discovery/.test(route.path)) return 'discovery'
+    if(/^\/loans/.test(route.path)) return 'loans'
+    if(/^\/collaborators/.test(route.path)) return 'collaborators'
+    if(/^\/users/.test(route.path)) return 'users'
+    return '/'
+  },
+  set: (value: string) => {}
+})
 </script>
 
 <style scoped></style>

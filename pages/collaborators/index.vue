@@ -66,7 +66,7 @@
 </template>
 <script lang="ts" setup>
 import {PaginationProps} from "naive-ui/es/pagination/src/Pagination"
-import {DataTableColumns, FormInst, FormItemRule, NButton, NTag} from "naive-ui"
+import {DataTableColumns, FormInst, FormItemRule, NButton, NTag, NInput} from "naive-ui"
 import {CreateCollaboratorInput, UpdateCollaboratorInput} from "~/apollo/__generated__/serverTypes";
 import {FormRules} from "naive-ui/es/form/src/interface";
 import {CreateCollaborator, CreateCollaboratorVariables} from "~/apollo/mutates/__generated__/CreateCollaborator";
@@ -95,7 +95,12 @@ const filter = reactive<GetCollaboratorsVariables>({
   }
 })
 const {result, loading, refetch} = useQuery<GetCollaborators, GetCollaboratorsVariables>(GET_COLLABORATORS, filter)
-const users = computed<GetCollaborators_collaborators[]>(() => result.value?.collaborators || [])
+
+// search
+const keyword = ref('')
+const users = computed<GetCollaborators_collaborators[]>(() => (result.value?.collaborators || []).filter((user) => {
+  return user.name.toLowerCase().includes(keyword.value.toLowerCase())
+}))
 
 const { $apollo } = useNuxtApp()
 
@@ -167,10 +172,11 @@ const columns = ref<DataTableColumns<GetCollaborators_collaborators>>([
   },
   {
     title: 'Khách Hàng',
-    key: 'status',
+    key: 'clients',
     render(row) {
       return h(NTag, {type: 'info'}, {default: () => row.clients.length})
-    }
+    },
+    sorter: (row1, row2) => row1.clients.length - row2.clients.length
   },
   {
     title: 'Trạng Thái',

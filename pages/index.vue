@@ -72,29 +72,34 @@ const rules = computed<FormRules>(() => ({
  */
 const errorExtracted =  (_e: FirebaseError) => {
   if (_e.code === AuthErrorCodes.USER_DELETED) {
+    message.error('Tài khoản không tồn tại')
     //errorMessages.total = 'Tài khoản không tồn tại'
   } else if (_e.code === AuthErrorCodes.USER_DISABLED) {
     //errorMessages.total = 'Tài khoản đã bị khóa'
+    message.error('Tài khoản đã bị khóa')
   } else if (_e.code === AuthErrorCodes.INVALID_PASSWORD) {
     //errorMessages.total = 'Mật khẩu không đúng'
+    message.error('Mật khẩu không đúng')
   } else if (_e.code === AuthErrorCodes.INVALID_EMAIL) {
     //errorMessages.total = 'Email không hợp lệ'
+    message.error('Email không hợp lệ')
   } else {
     // errorMessages.total = 'Đăng nhập thất bại'
+    message.error('Đăng nhập thất bại')
   }
 }
 const register = async () => {
   try {
     await signInWithEmailAndPassword(faAuth(), from.email + '@gmail.com', from.password)
+    message.success('Đăng nhập thành công')
   } catch (e) {
     errorExtracted(e as FirebaseError)
   }
 }
 const onSubmit = async () => {
-  console.log('onSubmit')
   formRef.value?.validate((errors) => {
     if (errors) {
-      return message.success('Vui lòng nhập đầy đủ thông tin')
+      return message.error('Vui lòng nhập đầy đủ thông tin')
     }
     register()
   })

@@ -1,11 +1,13 @@
 <template>
-  <n-config-provider :theme="darkTheme" :theme-overrides="themeOverrides">
-    <n-message-provider>
-      <n-space vertical size="large">
-        <NuxtLayout />
-      </n-space>
-    </n-message-provider>
-  </n-config-provider>
+  <div :class="[showUI ? '' : 'opacity-0']">
+    <n-config-provider :theme="darkTheme" :theme-overrides="themeOverrides">
+      <n-message-provider>
+        <n-space vertical size="large">
+          <NuxtLayout />
+        </n-space>
+      </n-message-provider>
+    </n-config-provider>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -21,6 +23,9 @@ const themeOverrides = reactive<GlobalThemeOverrides>({
 })
 
 const _theme = computed(() => mode.value === 'light' ? null : darkTheme)
+
+const [showUI, toggleUI] = useToggle(false)
+onMounted(() => nextTick(() => toggleUI(true)))
 </script>
 
 <style scoped></style>

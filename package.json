@@ -25,6 +25,7 @@
     "@vueuse/nuxt": "^9.12.0",
     "nuxt": "^3.2.0",
     "nuxt-icon": "^0.2.11",
+    "signature_pad": "^4.1.4",
     "tailwind-scrollbar-hide": "^1.1.7",
     "vfonts": "^0.0.3"
   },

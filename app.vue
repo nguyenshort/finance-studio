@@ -1,16 +1,26 @@
 <template>
-  <NuxtLayout />
+  <n-config-provider :theme="darkTheme" :theme-overrides="themeOverrides">
+    <n-message-provider>
+      <n-space vertical size="large">
+        <NuxtLayout />
+      </n-space>
+    </n-message-provider>
+  </n-config-provider>
 </template>
 
-<style>
-.btn-effect {
-  @apply flex items-center justify-center text-white shadow-md transition duration-300 ease-in-out hover:shadow bg-gradient-to-r from-primary-500 to-primary-700 rounded-full shadow-primary-300
-}
-.btn-text-size {
-  @apply text-mini sm:text-semi-mini
-}
+<script lang="ts" setup>
+import {darkTheme} from 'naive-ui'
+import {GlobalThemeOverrides} from "naive-ui/es/config-provider/src/interface"
 
-.animate {
-  @apply transition duration-300 ease-in-out
-}
-</style>
+const mode = useColorMode()
+
+const themeOverrides = reactive<GlobalThemeOverrides>({
+  common: {
+    primaryColor: '#1890ff'
+  }
+})
+
+const _theme = computed(() => mode.value === 'light' ? null : darkTheme)
+</script>
+
+<style scoped></style>

@@ -51,6 +51,10 @@ export interface GetInfoFilter {
   id: string;
 }
 
+export interface GetLoanFilter {
+  user: string;
+}
+
 export interface GetUserFilter {
   id: string;
 }

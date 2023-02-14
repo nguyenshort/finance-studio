@@ -62,11 +62,14 @@
 
 <script lang="ts" setup>
 import {SelectMixedOption} from "naive-ui/es/select/src/interface"
-import {GET_INFO} from "~/apollo/queries/info.query"
-import {AdminInfo, AdminInfo_adminInfo} from "~/apollo/queries/__generated__/AdminInfo"
+import {AdminInfo_adminInfo} from "~/apollo/queries/__generated__/AdminInfo"
 import {FormRules} from "naive-ui/es/form/src/interface";
 import {FormInst} from "naive-ui";
-import {AdminUpdateInfo, AdminUpdateInfoVariables} from "~/apollo/mutates/__generated__/AdminUpdateInfo";
+import {AdminUpdateInfo, AdminUpdateInfoVariables} from "~/apollo/mutates/__generated__/AdminUpdateInfo"
+
+const props = defineProps<{
+  initData: AdminInfo_adminInfo
+}>()
 
 const { $dayjs } = useNuxtApp()
 const message = useMessage()
@@ -75,11 +78,7 @@ const message = useMessage()
  * Section: Get contract data
  */
 const route = useRoute()
-const {data} = await useAsyncQuery<AdminInfo>(GET_INFO, {
-  filter: {id: route.params.id}
-})
-const contract = computed(() => data.value!.adminInfo)
-const form = ref<Partial<AdminInfo_adminInfo>>(toRaw(contract.value))
+const form = ref<Partial<AdminInfo_adminInfo>>(toRaw(props.initData))
 
 /**
  * Section: Getter fields
@@ -159,11 +158,7 @@ const submit = () => {
     if (errors) {
       return message.success('Vui lòng nhập đầy đủ thông tin')
     }
-
-    // remove the __typename field
     const { __typename, id, ...data } = toRaw(form.value)
-    console.log(data)
-
     mutate({
       input: {
         ...toRaw(data),

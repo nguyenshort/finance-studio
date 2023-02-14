@@ -4,9 +4,8 @@
       <layout-tabs :tabs="tabs" fallback="verify" />
     </layout-teleport>
 
-    <keep-alive>
-      <user-verify v-if="$route.query.tab === 'verify'" />
-    </keep-alive>
+    <user-verify-wrapper v-if="$route.query.tab === 'verify'" />
+    <user-loan-wrapper v-else-if="$route.query.tab === 'loan'" />
 
   </div>
 </template>
@@ -27,6 +26,10 @@ const tabs = computed<{
   {
     label: 'Khoản Vay',
     value: 'loan'
+  },
+  {
+    label: 'Biến Động Số Dư',
+    value: 'report'
   },
 ])
 </script>

@@ -114,6 +114,10 @@ input GetInfoFilter {
   id: ID!
 }
 
+input GetLoanFilter {
+  user: ID!
+}
+
 input GetLoansFilter {
   limit: Int!
   offset: Int!
@@ -241,7 +245,8 @@ type Notify {
 }
 
 type Query {
-  adminInfo(filter: GetInfoFilter!): Info!
+  adminInfo(filter: GetInfoFilter!): Info
+  adminLoan(filter: GetLoanFilter!): Loan
   adminLoans(filter: GetLoansFilter!): [Loan!]!
   adminUser(filter: GetUserFilter!): User!
   bank: Bank

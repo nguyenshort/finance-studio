@@ -24,7 +24,7 @@ export interface AdminInfo_adminInfo {
 }
 
 export interface AdminInfo {
-  adminInfo: AdminInfo_adminInfo;
+  adminInfo: AdminInfo_adminInfo | null;
 }
 
 export interface AdminInfoVariables {

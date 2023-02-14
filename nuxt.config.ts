@@ -79,6 +79,7 @@ export default defineNuxtConfig({
             apiBase: '/api',
             apiGraphQL: process.env.NUXT_PUBLIC_APOLLO_ENDPOIT,
             apiBackend: process.env.NUXT_PUBLIC_BACKEND_ENDPOIT,
+            cdnEndpoint: process.env.NUXT_PUBLIC_CDN_ENDPOIT,
         }
     },
     experimental: {

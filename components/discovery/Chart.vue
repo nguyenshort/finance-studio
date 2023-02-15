@@ -35,7 +35,7 @@ const users = computed<AdminRangeUsers['adminRangeUsers']>(() => result.value?.a
 /**
  * using props.range to define chart data
  * if <= 1 day => filter by hour
- * else if <= 30 days => filter by day
+ * else if <= 31 days => filter by day
  * else filter by month
  */
 const { $dayjs } = useNuxtApp()

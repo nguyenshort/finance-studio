@@ -101,12 +101,15 @@ const columns = ref<DataTableColumns<AdminRangeUsers_adminRangeUsers>>([
           NButton,
           {
             size: 'small',
-            type: 'error',
-            onClick: () => {
-              console.log(row)
-            }
+            type: 'info',
+            onClick: () => router.push({
+              name: 'users-id',
+              params: {
+                id: row.id
+              }
+            })
           },
-          { default: () => 'Xoá' }
+          { default: () => 'Sửa' }
       )
     }
   }

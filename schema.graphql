@@ -259,6 +259,7 @@ type Query {
   adminInfo(filter: GetInfoFilter!): Info
   adminLoan(filter: GetLoanFilter!): Loan
   adminLoans(filter: GetLoansFilter!): [Loan!]!
+  adminRangeUsers(filter: RangeUsersFilter!): [User!]!
   adminUser(filter: GetUserFilter!): User!
   bank: Bank
   collaborator(filter: GetCollaboratorFilter!): Collaborator!
@@ -270,6 +271,11 @@ type Query {
   logbook(id: Int!): Logbook!
   me: User!
   users(filter: GetUsersFilter!): [User!]!
+}
+
+input RangeUsersFilter {
+  end: Float!
+  start: Float!
 }
 
 input SignLoanInput {

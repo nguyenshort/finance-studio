@@ -3,11 +3,17 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { GetUsersFilter, UserRole } from "./../../__generated__/serverTypes";
+import { GetUsersFilter } from "./../../__generated__/serverTypes";
 
 // ====================================================
 // GraphQL query operation: GetUsers
 // ====================================================
+
+export interface GetUsers_users_info {
+  __typename: "Info";
+  id: string;
+  name: string;
+}
 
 export interface GetUsers_users_collaborator {
   __typename: "Collaborator";
@@ -18,10 +24,10 @@ export interface GetUsers_users_collaborator {
 export interface GetUsers_users {
   __typename: "User";
   id: string;
-  name: string;
   email: string | null;
-  role: UserRole;
   balance: number;
+  createdAt: number;
+  info: GetUsers_users_info | null;
   collaborator: GetUsers_users_collaborator | null;
 }
 

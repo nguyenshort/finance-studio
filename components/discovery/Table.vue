@@ -1,36 +1,29 @@
 <template>
-  <n-space vertical :size="12">
-    <n-data-table
-        :bordered="false"
-        :single-line="false"
-        :columns="columns"
-        :data="users"
-        :row-key="getRowKey"
-        :pagination="pagination"
-        :loading="loading"
-    />
-  </n-space>
+  <n-data-table
+      :bordered="false"
+      :single-line="false"
+      :columns="columns"
+      :data="users"
+      :row-key="getRowKey"
+      :pagination="pagination"
+  />
 </template>
+
 <script lang="ts" setup>
-import {PaginationProps} from "naive-ui/es/pagination/src/Pagination"
-import {DataTableColumns, NButton, NTag} from "naive-ui"
-import {GetUsers, GetUsers_users, GetUsersVariables} from "~/apollo/queries/__generated__/GetUsers"
-import { NuxtLink } from "#components"
+import { AdminRangeUsers_adminRangeUsers} from "~/apollo/queries/__generated__/AdminRangeUsers";
+import {DataTableColumns, NButton, NTag} from "naive-ui";
+import {PaginationProps} from "naive-ui/es/pagination/src/Pagination";
+import {NuxtLink} from "#components";
+
+const props = defineProps<{
+  users: AdminRangeUsers_adminRangeUsers[]
+}>()
+
+const getRowKey = (user: AdminRangeUsers_adminRangeUsers) => user.id
 
 const router = useRouter()
-
-const filter = reactive<GetUsersVariables>({
-  filter: {
-    limit: 10,
-    offset: 0,
-    sort: 'createdAt'
-  }
-})
-const { result, loading } = useQuery<GetUsers, GetUsersVariables>(GET_USERS, filter)
-const users = computed<GetUsers_users[]>(() => result.value?.users || [])
-const getRowKey = (user: GetUsers_users) => user.id
 const { $dayjs } = useNuxtApp()
-const columns = ref<DataTableColumns<GetUsers_users>>([
+const columns = ref<DataTableColumns<AdminRangeUsers_adminRangeUsers>>([
   {
     title: 'Tên',
     key: 'name',
@@ -48,11 +41,6 @@ const columns = ref<DataTableColumns<GetUsers_users>>([
           { default: () => row.info?.name || '--' }
       )
     }
-  },
-  {
-    title: 'Số Dư',
-    key: 'balance',
-    sorter: (row1, row2) => row1.balance - row2.balance
   },
   {
     title: 'Số Điện Thoại',
@@ -123,7 +111,12 @@ const columns = ref<DataTableColumns<GetUsers_users>>([
     }
   }
 ])
+
 const pagination = reactive<PaginationProps>({
   pageSize: 10
 })
 </script>
+
+<style scoped>
+
+</style>

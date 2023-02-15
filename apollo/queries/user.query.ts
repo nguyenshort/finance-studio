@@ -2,10 +2,13 @@ export const GET_USERS = gql`
     query GetUsers($filter: GetUsersFilter!) {
         users(filter: $filter) {
             id
-            name
             email
-            role
             balance
+            createdAt
+            info {
+                id
+                name
+            }
             collaborator {
                 id
                 name
@@ -22,34 +25,28 @@ export const GET_USER = gql`
     }
 `
 
-export const GET_CONTRACT = gql`
-    query AdminUserContract($filter: GetUserFilter!) {
-        adminUser(filter: $filter) {
+export const RANGE_USERS = gql`
+    query AdminRangeUsers($filter: RangeUsersFilter!) {
+        adminRangeUsers(filter: $filter) {
             id
-            info {
-                id
-                name
-                born
-                cccd
-                address
-                education
-                income
-                job
-                marriage
-                purpose
-            }
-            loan {
-                id
-                amount
-                months
-                interest
-                signature
-                status
-            }
+            createdAt
             collaborator {
                 id
                 name
-                fanpage
+                status
+            }
+            email
+            info {
+                id
+                cccd
+                name
+            }
+            loan {
+                id
+                signature
+                months
+                status
+                amount
             }
         }
     }

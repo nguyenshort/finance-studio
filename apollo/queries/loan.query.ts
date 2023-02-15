@@ -31,3 +31,26 @@ export const GET_COLLABORATORS_FOR_LOAN = gql`
         }
     }
 `
+
+export const GET_LOANS = gql`
+    query AdminLoans($filter: GetLoansFilter!) {
+        adminLoans(filter: $filter) {
+            id
+            months
+            user {
+                id
+                email
+                info {
+                    id
+                    name
+                }
+            }
+            interest
+            amount
+            createdAt
+            signature
+            status
+            updatedAt
+        }
+    }
+`

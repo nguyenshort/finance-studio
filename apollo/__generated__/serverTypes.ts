@@ -58,6 +58,12 @@ export interface GetLoanFilter {
   user: string;
 }
 
+export interface GetLoansFilter {
+  limit: number;
+  offset: number;
+  sort: string;
+}
+
 export interface GetUserFilter {
   id: string;
 }
@@ -69,6 +75,11 @@ export interface GetUsersFilter {
   name?: string | null;
   offset: number;
   sort: string;
+}
+
+export interface RangeUsersFilter {
+  end: number;
+  start: number;
 }
 
 export interface UpdateBankInput {

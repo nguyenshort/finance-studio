@@ -48,7 +48,7 @@ const columns = ref<DataTableColumns<GetCollaborator_collaborator_clients>>([
   {
     title: 'Tên',
     key: 'info.name',
-    render: (row) => h(NuxtLink, { to: `/loans/${row.loan?.id}` }, { default: () => row.info!.name })
+    render: (row) => h(NuxtLink, { to: `/users/${row.id}` }, { default: () => row.info!.name })
   },
   {
     title: 'CCCD/CMND',
@@ -92,7 +92,7 @@ const columns = ref<DataTableColumns<GetCollaborator_collaborator_clients>>([
           {
             size: 'small',
             type: 'info',
-            onClick: () => router.push(`/loans/${row.loan?.id}`)
+            onClick: () => router.push(`/users/${row.id}`)
           },
           { default: () => 'Sửa' }
       )

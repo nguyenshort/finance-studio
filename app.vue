@@ -1,6 +1,6 @@
 <template>
   <div :class="[showUI ? '' : 'opacity-0']">
-    <n-config-provider :theme="darkTheme" :theme-overrides="themeOverrides">
+    <n-config-provider :theme="darkTheme" :theme-overrides="themeOverrides" :locale="viVN" :date-locale="dateViVN">
       <n-message-provider>
         <n-space vertical size="large">
           <NuxtLayout />
@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts" setup>
-import {darkTheme} from 'naive-ui'
+import {darkTheme, viVN, dateViVN} from 'naive-ui'
 import {GlobalThemeOverrides} from "naive-ui/es/config-provider/src/interface"
 
 const mode = useColorMode()

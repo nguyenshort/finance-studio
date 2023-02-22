@@ -1,6 +1,6 @@
 <template>
   <div :class="[showUI ? '' : 'opacity-0']">
-    <n-config-provider :theme="darkTheme" :theme-overrides="themeOverrides" :locale="viVN" :date-locale="dateViVN">
+    <n-config-provider :theme-overrides="themeOverrides" :locale="viVN" :date-locale="dateViVN">
       <n-message-provider>
         <n-space vertical size="large">
           <NuxtLayout />

@@ -115,7 +115,7 @@ const props = defineProps<{
 const message = useMessage()
 
 /**
- * Section: ollaborators
+ * Section: collaborators
  */
 const {result, loading} = useQuery<FormCollaborators, FormCollaboratorsVariables>(GET_COLLABORATORS_FOR_LOAN, {
   filter: {

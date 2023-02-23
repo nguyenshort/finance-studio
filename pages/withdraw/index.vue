@@ -36,6 +36,8 @@
           />
         </n-form-item>
 
+        <p class="-mt-3 text-[13px] text-gray-500">Xác minh lại các thông tin phía trên</p>
+
       </n-form>
 
 
@@ -263,7 +265,17 @@ const columns = ref<DataTableColumns<AdminLogbooks_adminLogbooks>>([
               h(
                   NButton,
                   {
-                    type: 'error'
+                    type: 'error',
+                    onClick: () => {
+                      form.value = {
+                        amount: row.amount,
+                        content: row.content,
+                        id: row.id,
+                        note: row.note,
+                        status: LOGBOOK_STATUS.REJECTED
+                      }
+                      toggleShowModal(true)
+                    },
                   },
                   {
                     default: () => 'Tù Chối'

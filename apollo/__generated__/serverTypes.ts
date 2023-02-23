@@ -13,6 +13,22 @@ export enum COLLABORATOR_STATUS {
   INACTIVE = "INACTIVE",
 }
 
+export enum LOGBOOK_GROUP {
+  LOAN = "LOAN",
+  WITHDRAW = "WITHDRAW",
+}
+
+export enum LOGBOOK_STATUS {
+  APPROVED = "APPROVED",
+  PENDING = "PENDING",
+  REJECTED = "REJECTED",
+}
+
+export enum LOGBOOK_TYPE {
+  ADD = "ADD",
+  SUBTRACT = "SUBTRACT",
+}
+
 export enum LoanStatus {
   APPROVED = "APPROVED",
   PENDING = "PENDING",
@@ -64,6 +80,15 @@ export interface GetLoansFilter {
   sort: string;
 }
 
+export interface GetLogbooksFilter {
+  group?: LOGBOOK_GROUP[] | null;
+  limit: number;
+  offset: number;
+  sort: string;
+  status?: LOGBOOK_STATUS[] | null;
+  type?: LOGBOOK_TYPE[] | null;
+}
+
 export interface GetUserFilter {
   id: string;
 }
@@ -80,12 +105,6 @@ export interface GetUsersFilter {
 export interface RangeUsersFilter {
   end: number;
   start: number;
-}
-
-export interface UpdateBankInput {
-  account: string;
-  bank: string;
-  name: string;
 }
 
 export interface UpdateCollaboratorInput {
@@ -119,6 +138,14 @@ export interface UpdateLoanInput {
   interest?: number | null;
   months?: number | null;
   user: string;
+}
+
+export interface UpdateWithdrawInput {
+  amount?: number | null;
+  content?: string | null;
+  id: string;
+  note?: string | null;
+  status?: LOGBOOK_STATUS | null;
 }
 
 //==============================================================

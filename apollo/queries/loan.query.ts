@@ -54,3 +54,36 @@ export const GET_LOANS = gql`
         }
     }
 `
+
+export const GET_LOGBOOKS = gql`
+    query AdminLogbooks($filter: GetLogbooksFilter!) {
+        adminLogbooks(filter: $filter) {
+            id
+            createdAt
+            amount
+            content
+            group
+            status
+            note
+            type
+            user {
+                id
+                info {
+                    name
+                    cccd
+                }
+                bank {
+                    id
+                    name
+                    bank
+                    account
+                }
+                collaborator {
+                    id
+                    name
+                }
+            }
+        }
+    }
+`
+

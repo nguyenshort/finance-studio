@@ -73,6 +73,12 @@ enum COLLABORATOR_STATUS {
   INACTIVE
 }
 
+input CreateBankInput {
+  account: String!
+  bank: String!
+  name: String!
+}
+
 input CreateCollaboratorInput {
   fanpage: String!
   name: String!
@@ -101,9 +107,9 @@ input CreateLoanInput {
   months: Int!
 }
 
-input CreateLogbookInput {
+input CreateWithdrawInput {
   """Example field (placeholder)"""
-  exampleField: Int!
+  amount: Float!
 }
 
 input GetCollaboratorFilter {
@@ -133,6 +139,17 @@ input GetLoansFilter {
 
   """Sắp xếp của bình luận"""
   sort: String!
+}
+
+input GetLogbooksFilter {
+  group: [LOGBOOK_GROUP!] = [LOAN, WITHDRAW]
+  limit: Int!
+  offset: Int!
+
+  """Sắp xếp của bình luận"""
+  sort: String!
+  status: [LOGBOOK_STATUS!] = [PENDING, APPROVED, REJECTED]
+  type: [LOGBOOK_TYPE!] = [ADD, SUBTRACT]
 }
 
 input GetUserFilter {
@@ -214,34 +231,51 @@ type Logbook {
   createdAt: Float!
 
   """Nhóm trạng thái"""
-  group: LOGBOOK_STATUS!
+  group: LOGBOOK_GROUP!
   id: ID!
   note: String
+
+  """Nhóm trạng thái"""
+  status: LOGBOOK_STATUS!
+
+  """Nhóm cong tru"""
+  type: LOGBOOK_TYPE!
   updatedAt: Float!
   user: User!
 }
 
-enum LOGBOOK_STATUS {
+enum LOGBOOK_GROUP {
   LOAN
+  WITHDRAW
+}
+
+enum LOGBOOK_STATUS {
+  APPROVED
+  PENDING
+  REJECTED
+}
+
+enum LOGBOOK_TYPE {
+  ADD
+  SUBTRACT
 }
 
 type Mutation {
   adminUpdateInfo(input: UpdateInfoInput!): Info!
   adminUpdateLoan(input: UpdateLoanInput!): Loan!
   adminUpdateUser(input: AdminUpdateUserInput!): User!
+  adminUpdateWithdraw(input: UpdateWithdrawInput!): Logbook!
+  createBank(input: CreateBankInput!): Bank!
   createCollaborator(input: CreateCollaboratorInput!): Collaborator!
   createInfo(input: CreateInfoInput!): Info!
   createLanguage(createLanguageInput: CreateLanguageInput!): Language!
   createLoan(input: CreateLoanInput!): Loan!
-  createLogbook(createLogbookInput: CreateLogbookInput!): Logbook!
+  createWithdraw(input: CreateWithdrawInput!): Logbook!
   removeLanguage(id: Int!): Language!
-  removeLogbook(id: Int!): Logbook!
   signLoan(input: SignLoanInput!): Loan!
-  updateBank(input: UpdateBankInput!): Bank!
   updateCollaborator(input: UpdateCollaboratorInput!): Collaborator!
   updateIdentity(input: UpdateIdentityInput!): Identity!
   updateLanguage(updateLanguageInput: UpdateLanguageInput!): Language!
-  updateLogbook(updateLogbookInput: UpdateLogbookInput!): Logbook!
 }
 
 type Notify {
@@ -259,6 +293,7 @@ type Query {
   adminInfo(filter: GetInfoFilter!): Info
   adminLoan(filter: GetLoanFilter!): Loan
   adminLoans(filter: GetLoansFilter!): [Loan!]!
+  adminLogbooks(filter: GetLogbooksFilter!): [Logbook!]!
   adminRangeUsers(filter: RangeUsersFilter!): [User!]!
   adminUser(filter: GetUserFilter!): User!
   bank: Bank
@@ -268,7 +303,7 @@ type Query {
   info: Info
   language(id: Int!): Language!
   loan: Loan
-  logbook(id: Int!): Logbook!
+  logbooks(filter: GetLogbooksFilter!): [Logbook!]!
   me: User!
   users(filter: GetUsersFilter!): [User!]!
 }
@@ -285,12 +320,6 @@ input SignLoanInput {
 type Subscription {
   """Nhận thông báo"""
   subNotify: Notify!
-}
-
-input UpdateBankInput {
-  account: String!
-  bank: String!
-  name: String!
 }
 
 input UpdateCollaboratorInput {
@@ -332,19 +361,23 @@ input UpdateLoanInput {
   user: ID!
 }
 
-input UpdateLogbookInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+input UpdateWithdrawInput {
+  amount: Float
+  content: String
+  id: ID!
+  note: String
+  status: LOGBOOK_STATUS
 }
 
 type User {
   avatar: String
   balance: Float!
+  bank: Bank
   collaborator: Collaborator
   createdAt: Float!
   email: String
   id: ID!
+  identity: Identity
   info: Info
   loan: Loan
   name: String!

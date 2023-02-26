@@ -17,11 +17,22 @@
     </n-popconfirm>
     <div class="w-2"></div>
 
+    <n-button
+        type="info"
+        size="small"
+        @click="bus.emit('update', logbook)"
+    >
+      Sửa
+    </n-button>
+
+    <div class="w-2"></div>
+
     <template v-if="logbook.group === 'WITHDRAW'">
       <n-button
           type="error"
           size="small"
-          :disabled="logbook.status === 'REJECTED'"
+          v-if="logbook.status === 'PENDING'"
+          @click="bus.emit('reject', logbook)"
       >
         Từ Chối
       </n-button>
@@ -29,19 +40,10 @@
       <n-button
           type="info"
           size="small"
-          :disabled="logbook.status === 'APPROVED'"
+          v-if="logbook.status === 'PENDING'"
+          @click="bus.emit('approve', logbook)"
       >
         Duyệt
-      </n-button>
-    </template>
-    <template v-else>
-
-      <n-button
-          type="info"
-          size="small"
-          @click="bus.emit('modify-logbook', logbook)"
-      >
-        Sửa
       </n-button>
     </template>
 

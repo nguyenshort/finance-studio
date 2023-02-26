@@ -32,7 +32,7 @@
 
        <div class="w-3"></div>
 
-       <n-button type="success" @click="bus.emit('modify-logbook')" :disabled="loading">
+       <n-button type="success" @click="bus.emit('new')" :disabled="loading">
          Thêm Giao Dịch
        </n-button>
 

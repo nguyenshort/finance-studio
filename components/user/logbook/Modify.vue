@@ -227,24 +227,27 @@ const submit = () => {
 
 const bus = useEventBus<string, (UpdateLogbookInput | undefined )>('modify-logbook')
 bus.on((event: string, payload) => {
-  if(event === 'modify-logbook') {
-    if(payload) {
-      toggleCreate(false)
-      form.value = JSON.parse(JSON.stringify(payload))
-    } else {
-      toggleCreate(true)
-      form.value = {
-        amount: 0,
-        content: '',
-        effective: true,
-        group: LOGBOOK_GROUP.LOAN,
-        note: '',
-        status: LOGBOOK_STATUS.APPROVED,
-        type: LOGBOOK_TYPE.ADD
-      }
+  if(event === 'new') {
+    toggleCreate(true)
+    form.value = {
+      amount: 0,
+      content: '',
+      effective: true,
+      group: LOGBOOK_GROUP.LOAN,
+      note: '',
+      status: LOGBOOK_STATUS.APPROVED,
+      type: LOGBOOK_TYPE.ADD
     }
-    toggle(true)
+  } else {
+    toggleCreate(false)
+    form.value = JSON.parse(JSON.stringify(payload))
+     if (event === 'reject') {
+      form.value.status = LOGBOOK_STATUS.REJECTED
+    } else if (event === 'approve') {
+      form.value.status = LOGBOOK_STATUS.APPROVED
+    }
   }
+  toggle(true)
 })
 </script>
 

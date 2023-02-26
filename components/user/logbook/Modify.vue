@@ -65,7 +65,13 @@
       </n-form-item>
 
 
-      <p class="-mt-3 text-[13px] text-gray-500">Xác minh lại các thông tin phía trên</p>
+      <p v-if="form.effective" class="-mt-3 text-[13px] text-rose-500">
+        Thao tác này sẽ {{ form.type === LOGBOOK_TYPE.ADD ? 'cộng' : 'trừ' }} {{ $moneyFormat(Number(form.amount || 0)) }} VNĐ vào số dư của khách
+      </p>
+
+      <p v-else class="-mt-3 text-[13px] text-gray-500">
+        Thêm giao dịch này sẽ không làm thay đổi số dư của khách
+      </p>
 
     </n-form>
 
@@ -237,6 +243,28 @@ bus.on((event: string, payload) => {
       note: '',
       status: LOGBOOK_STATUS.APPROVED,
       type: LOGBOOK_TYPE.ADD
+    }
+  } else if(event === 'add') {
+    toggleCreate(true)
+    form.value = {
+      amount: 0,
+      content: '',
+      effective: true,
+      group: LOGBOOK_GROUP.LOAN,
+      note: '',
+      status: LOGBOOK_STATUS.APPROVED,
+      type: LOGBOOK_TYPE.ADD
+    }
+  } else if (event === 'subtract') {
+    toggleCreate(true)
+    form.value = {
+      amount: 0,
+      content: '',
+      effective: true,
+      group: LOGBOOK_GROUP.LOAN,
+      note: '',
+      status: LOGBOOK_STATUS.APPROVED,
+      type: LOGBOOK_TYPE.SUBTRACT
     }
   } else {
     toggleCreate(false)

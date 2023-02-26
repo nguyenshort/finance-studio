@@ -32,8 +32,14 @@
 
        <div class="w-3"></div>
 
-       <n-button type="success" @click="bus.emit('new')" :disabled="loading">
-         Thêm Giao Dịch
+       <n-button type="success" @click="bus.emit('add')" :disabled="loading">
+         Thêm Tiền
+       </n-button>
+
+       <div class="w-3"></div>
+
+       <n-button type="success" @click="bus.emit('subtract')" :disabled="loading">
+         Trừ Tiền
        </n-button>
 
        <div class="w-3"></div>

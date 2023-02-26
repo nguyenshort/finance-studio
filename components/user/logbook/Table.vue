@@ -105,7 +105,13 @@ const pagination = reactive<PaginationProps>({
 })
 
 const bus = useEventBus<string>('logbooks')
-const listener = (event: string) => event === 'refresh' && refresh()
+const bus2 = useEventBus<string>('balance')
+const listener = (event: string) => {
+  if(event === 'refresh') {
+    refresh()
+    bus2.emit('refresh')
+  }
+}
 bus.on(listener)
 
 defineExpose({

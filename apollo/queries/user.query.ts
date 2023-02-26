@@ -25,6 +25,15 @@ export const GET_USER = gql`
     }
 `
 
+export const GET_USER_BALANCE = gql`
+    query AdminUserBalance($filter: GetUserFilter!) {
+        adminUser(filter: $filter) {
+            id
+            balance
+        }
+    }
+`
+
 export const RANGE_USERS = gql`
     query AdminRangeUsers($filter: RangeUsersFilter!) {
         adminRangeUsers(filter: $filter) {

@@ -59,20 +59,15 @@
           />
         </n-form-item>
       </div>
-
       <n-form-item label="Gi chú rút tiền" path="note">
         <n-input v-model:value="form.note" placeholder="Gi chú giao dịch"/>
       </n-form-item>
-
-
       <p v-if="form.effective" class="-mt-3 text-[13px] text-rose-500">
         Thao tác này sẽ {{ form.type === LOGBOOK_TYPE.ADD ? 'cộng' : 'trừ' }} {{ $moneyFormat(Number(form.amount || 0)) }} VNĐ vào số dư của khách
       </p>
-
       <p v-else class="-mt-3 text-[13px] text-gray-500">
         Thêm giao dịch này sẽ không làm thay đổi số dư của khách
       </p>
-
     </n-form>
 
 
@@ -212,6 +207,7 @@ const updateLogbookHandle = async () => {
 }
 
 const bus2 = useEventBus<string>('logbooks')
+const bus3 = useEventBus<string>('balance')
 const submit = () => {
   formRef.value?.validate(async (errors) => {
     if (errors) {
@@ -227,6 +223,10 @@ const submit = () => {
     toggle(false)
 
     bus2.emit('refresh')
+
+    setTimeout(() => {
+      bus3.emit('refresh2')
+    }, 1000)
 
   })
 }

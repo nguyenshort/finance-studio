@@ -62,3 +62,12 @@ export const UPDATE_LOGBOOK = gql`
     }
   }
 `
+
+export const CHANGE_BALANCE = gql`
+  mutation AdminUpdateUserBalance($input: AdminUpdateUserInput!) {
+    adminUpdateUser(input: $input) {
+      id
+      balance
+    }
+  }
+`

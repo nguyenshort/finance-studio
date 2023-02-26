@@ -35,7 +35,7 @@
 
       <n-form-item label="Chữ Ký Người Vay" path="signature">
 
-        <div class="w-full aspect-w-3 aspect-h-1">
+        <div class="w-full aspect-w-3 aspect-h-1 overflow-hidden relative">
           <div
               class="relative overflow-hidden _signature rounded-md cursor-pointer w-full h-full"
               @click="toggleSignatureModal()"

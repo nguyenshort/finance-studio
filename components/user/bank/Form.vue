@@ -24,6 +24,18 @@
       </n-form-item>
     </n-form>
 
+    <n-divider title-placement="left">Thông Tin Bổ Sung</n-divider>
+
+    <n-form
+        ref="formRef2"
+        :rules="rules2"
+        :model="form2"
+    >
+      <n-form-item label="Số dư tài khoản" path="balance">
+        <n-input-number v-model:value.number="form2.balance" placeholder="Số dư tài khoản" @keydown.enter="debouncedUpdate2" class="w-full" :min="0" />
+      </n-form-item>
+    </n-form>
+
     <n-image-group class="w-full">
       <div v-if="identity" class="flex">
       <div class="w-1/3 pr-4">
@@ -46,6 +58,8 @@
       </div>
     </div>
     </n-image-group>
+
+
   </div>
 </template>
 
@@ -53,11 +67,17 @@
 import {AdminBank_adminBank} from "~/apollo/queries/__generated__/AdminBank"
 import {FormRules} from "naive-ui/es/form/src/interface"
 import {SelectMixedOption} from "naive-ui/es/select/src/interface";
-import {UPDATE_BANK} from "~/apollo/mutates/user.mutate";
+import {CHANGE_BALANCE, UPDATE_BANK} from "~/apollo/mutates/user.mutate";
 import {UpdateBank, UpdateBankVariables} from "~/apollo/mutates/__generated__/UpdateBank";
 import {FormInst} from "naive-ui";
 import {GET_ID} from "#imports";
 import {AdminIdentity, AdminIdentityVariables} from "~/apollo/queries/__generated__/AdminIdentity";
+import {AdminUserBalance, AdminUserBalanceVariables} from "~/apollo/queries/__generated__/AdminUserBalance";
+import {GET_USER_BALANCE} from "~/apollo/queries/user.query";
+import {
+  AdminUpdateUserBalance,
+  AdminUpdateUserBalanceVariables
+} from "~/apollo/mutates/__generated__/AdminUpdateUserBalance";
 
 const props = defineProps<{
   initData: AdminBank_adminBank
@@ -138,6 +158,64 @@ const { result } = useQuery<AdminIdentity, AdminIdentityVariables>(GET_ID, {
   }
 })
 const identity = computed(() => result.value?.adminIdentity)
+
+// user balance
+const formRef2 = ref<FormInst>()
+const { refetch, onResult } = useQuery<AdminUserBalance, AdminUserBalanceVariables>(GET_USER_BALANCE, {
+  filter: {
+    id: route.params.id as string
+  }
+})
+const form2 = ref({
+  balance: 0
+})
+const rules2 = computed<FormRules>(() => ({
+  balance: [
+    {
+      required: true,
+      trigger: 'blur',
+      validator: (rule, value) => {
+        if (value > 0) {
+          return Promise.resolve()
+        }
+        return Promise.reject('Số dư phải lớn hơn 0')
+      },
+    }
+  ]
+}))
+
+const { mutate: updateBalance } = useMutation<AdminUpdateUserBalance, AdminUpdateUserBalanceVariables>(CHANGE_BALANCE)
+
+const debouncedUpdate2 = useDebounceFn(async () => {
+  formRef2.value?.validate(async (errors) => {
+    if (errors) {
+      throw new Error('Form is not valid')
+    }
+    await updateBalance({
+      input: {
+        user: route.params.id as string,
+        balance: form2.value.balance
+      }
+    })
+    message.success('Cập nhật thành công')
+  })
+}, 500)
+
+
+onResult((res) => {
+  if(res.data?.adminUser) {
+    form2.value.balance = res.data.adminUser.balance
+  }
+})
+
+const bus = useEventBus<string>('balance')
+bus.on((event) => {
+  if(event === 'refresh') {
+    refetch()
+  } else if (event === 'refresh2') {
+    refetch()
+  }
+})
 
 defineExpose({
   submit,

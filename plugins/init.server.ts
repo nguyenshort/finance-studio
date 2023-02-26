@@ -6,8 +6,6 @@ export default defineNuxtPlugin(async (nuxtApp) => {
   const token = getCookie(useRequestEvent(), '_token')
 
   if(token && process.server) {
-
-
       try {
           const { user } = await $fetch('/api/me', {
               headers: {

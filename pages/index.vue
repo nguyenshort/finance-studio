@@ -91,7 +91,6 @@ const errorExtracted =  (_e: FirebaseError) => {
 const register = async () => {
   try {
     await signInWithEmailAndPassword(faAuth(), from.email + '@gmail.com', from.password)
-    message.success('Đăng nhập thành công')
   } catch (e) {
     errorExtracted(e as FirebaseError)
   }

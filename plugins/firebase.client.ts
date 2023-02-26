@@ -1,6 +1,6 @@
 import {initializeApp} from "@firebase/app";
 import {getAnalytics} from "@firebase/analytics";
-import {getAuth} from "firebase/auth";
+import {getAuth, signOut} from "firebase/auth";
 
 export default defineNuxtPlugin(nuxtApp => {
 // TODO: Add SDKs for Firebase products that you want to use
@@ -49,10 +49,6 @@ export default defineNuxtPlugin(nuxtApp => {
                         })
                         if(token) {
 
-                            if(window && route.name === 'index') {
-                                return window.location.href = '/discovery'
-                            }
-
                             const { user } = await $fetch('/api/me', {
                                 headers: {
                                     Authorization: 'Bearer ' + token
@@ -65,13 +61,20 @@ export default defineNuxtPlugin(nuxtApp => {
                                 // @ts-ignore
                                 authStore.user = user
                             }
+
+                            if(window && route.name === 'index') {
+                                return window.location.href = '/discovery'
+                            }
                         }
                         // if(route.path === '/auth') {
                         //     await router.push('/')
                         // }
 
                     } catch (e) {
-                       // await kokiApp.logOut()
+                        // logout
+                        await signOut(faAuth())
+                        // window.location.href = '/'
+                        // await kokiApp.logOut()
                     }
                 }
             } else {

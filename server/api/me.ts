@@ -1,7 +1,14 @@
-import { defineEventHandler, getHeader, createError } from 'h3'
+import { defineEventHandler, getHeader, createError, deleteCookie } from 'h3'
 
 export default defineEventHandler(async (event) => {
   const runtimeConfig = useRuntimeConfig()
+
+  const removeAll = () => {
+    const cookies = parseCookies(event)
+    Object.keys(cookies).forEach((key) => {
+        deleteCookie(event, key)
+    })
+  }
 
   try {
     const token = getHeader(event, 'Authorization')
@@ -18,13 +25,22 @@ export default defineEventHandler(async (event) => {
         Authorization: token
       }
     })
+    // @ts-ignore
+    if (Number(user?.role) === 0) {
+      // removeAll()
+        return createError({
+            statusCode: 401,
+            message: 'Unauthorized'
+        })
+    }
 
     return {
         user
     }
 
   } catch (e) {
-      //
+    // removeAll()
+    //
   }
   return createError({
     statusCode: 401,

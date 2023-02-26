@@ -78,19 +78,19 @@ const menuOptions = computed<MenuOptionWithIcon[]>(() => [
     icon_name: 'majesticons:support-line'
   },
   // withdraw
-  {
-    label: () => h(
-        NuxtLink,
-        {
-          to: {
-            name: 'withdraw'
-          }
-        },
-        {default: () => 'Rút Tiền'}
-    ),
-    key: 'withdraw',
-    icon_name: 'ri:money-dollar-circle-line'
-  },
+  // {
+  //   label: () => h(
+  //       NuxtLink,
+  //       {
+  //         to: {
+  //           name: 'withdraw'
+  //         }
+  //       },
+  //       {default: () => 'Rút Tiền'}
+  //   ),
+  //   key: 'withdraw',
+  //   icon_name: 'ri:money-dollar-circle-line'
+  // },
   {
     label: () => h(
         NuxtLink,

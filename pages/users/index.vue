@@ -9,6 +9,11 @@
         :pagination="pagination"
         :loading="loading"
     />
+
+    <layout-teleport to="#tabs">
+      <n-input v-model:value="keyword" placeholder="Nhập CCCD để tìm kiếm" class="!w-[300px]" />
+    </layout-teleport>
+
   </n-space>
 </template>
 <script lang="ts" setup>
@@ -26,8 +31,11 @@ const filter = reactive<GetUsersVariables>({
     sort: 'createdAt'
   }
 })
+
+const keyword = ref<string>('')
+
 const { result, loading } = useQuery<GetUsers, GetUsersVariables>(GET_USERS, filter)
-const users = computed<GetUsers_users[]>(() => result.value?.users || [])
+const users = computed<GetUsers_users[]>(() => (result.value?.users || []).filter(user => user.info?.cccd?.includes(keyword.value)))
 const getRowKey = (user: GetUsers_users) => user.id
 const { $dayjs } = useNuxtApp()
 const columns = ref<DataTableColumns<GetUsers_users>>([
@@ -53,6 +61,25 @@ const columns = ref<DataTableColumns<GetUsers_users>>([
     title: 'Số Dư',
     key: 'balance',
     sorter: (row1, row2) => row1.balance - row2.balance
+  },
+  {
+    title: 'CCCD',
+    key: 'cccd',
+    render(row): any {
+      return h(
+          NTag,
+          {
+            style: {
+              marginRight: '6px'
+            },
+            type: 'info',
+            bordered: false
+          },
+          {
+            default: () => row.info?.cccd
+          }
+      )
+    }
   },
   {
     title: 'Số Điện Thoại',

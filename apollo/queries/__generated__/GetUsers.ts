@@ -13,6 +13,7 @@ export interface GetUsers_users_info {
   __typename: "Info";
   id: string;
   name: string;
+  cccd: string;
 }
 
 export interface GetUsers_users_collaborator {

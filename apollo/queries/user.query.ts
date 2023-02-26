@@ -8,6 +8,7 @@ export const GET_USERS = gql`
             info {
                 id
                 name
+                cccd
             }
             collaborator {
                 id

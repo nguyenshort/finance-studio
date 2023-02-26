@@ -22,6 +22,9 @@ export interface AdminUpdateWithdraw_adminUpdateWithdraw {
 }
 
 export interface AdminUpdateWithdraw {
+  /**
+   * Cannot effect to user balance
+   */
   adminUpdateWithdraw: AdminUpdateWithdraw_adminUpdateWithdraw;
 }
 

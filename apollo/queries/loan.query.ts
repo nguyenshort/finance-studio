@@ -56,7 +56,7 @@ export const GET_LOANS = gql`
 `
 
 export const GET_LOGBOOKS = gql`
-    query AdminLogbooks($filter: GetLogbooksFilter!) {
+    query AdminLogbooks($filter: AdminGetLogbooksFilter!) {
         adminLogbooks(filter: $filter) {
             id
             createdAt
@@ -87,3 +87,17 @@ export const GET_LOGBOOKS = gql`
     }
 `
 
+export const ADMIN_LOGBOOKS = gql`
+    query UserLogbooks($filter: AdminGetLogbooksFilter!) {
+        adminLogbooks(filter: $filter) {
+            id
+            amount
+            content
+            note
+            group
+            status
+            type
+            createdAt
+        }
+    }
+`

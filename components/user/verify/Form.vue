@@ -1,65 +1,55 @@
 <template>
   <div>
-    <layout-teleport to="#actions">
-      <n-button type="primary" @click="submit" :loading="loading">
-        <Icon name="ic:twotone-plus" class="mr-1"/>
-        Cập Nhật
-      </n-button>
-    </layout-teleport>
+    <n-divider title-placement="left">Thông Tin Xác Minh</n-divider>
+    <n-form
+        ref="formRef"
+        :model="form"
+        :rules="rules"
+        :label-width="160"
+    >
+      <n-form-item label="Tên" path="name">
+        <n-input v-model:value="form.name" placeholder="Tên người vay" @keydown.enter="debouncedUpdate" />
+      </n-form-item>
 
-    <div class="mx-auto w-[640px]">
-      <n-spin :show="loading">
-        <n-form
-            ref="formRef"
-            :model="form"
-            :rules="rules"
-            :label-width="160"
-        >
-          <n-form-item label="Tên" path="name">
-            <n-input v-model:value="form.name" placeholder="Tên người vay"/>
-          </n-form-item>
+      <div class="flex">
+        <n-form-item label="Ngày Sinh" path="born">
+          <n-date-picker v-model:value="born" type="date" format="dd/MM/yyyy" />
+        </n-form-item>
 
-          <div class="flex">
-            <n-form-item label="Ngày Sinh" path="born">
-              <n-date-picker v-model:value="born" type="date" format="dd/MM/yyyy" />
-            </n-form-item>
+        <n-form-item label="CCCD/CMND" path="cccd" class="ml-11">
+          <n-input v-model:value="form.cccd" placeholder="Mã số định danh người vay"/>
+        </n-form-item>
+      </div>
 
-            <n-form-item label="CCCD/CMND" path="cccd" class="ml-11">
-              <n-input v-model:value="form.cccd" placeholder="Mã số định danh người vay"/>
-            </n-form-item>
-          </div>
+      <n-form-item label="Địa Chỉ" path="address">
+        <n-input v-model:value="form.address" placeholder="Địa chỉ người vay" @keydown.enter="debouncedUpdate"/>
+      </n-form-item>
 
-          <n-form-item label="Địa Chỉ" path="address">
-            <n-input v-model:value="form.address" placeholder="Địa chỉ người vay"/>
-          </n-form-item>
+      <n-form-item label="Trình Độ Học Vấn" path="education">
+        <n-select v-model:value="form.education" :options="educationColumes" placeholder="Trình độ học vấn" />
+      </n-form-item>
 
-          <n-form-item label="Trình Độ Học Vấn" path="education">
-            <n-select v-model:value="form.education" :options="educationColumes" placeholder="Trình độ học vấn" />
-          </n-form-item>
+      <n-form-item label="Công Việc" path="job">
+        <n-input v-model:value="form.job" placeholder="Công việc người vay" @keydown.enter="debouncedUpdate"/>
+      </n-form-item>
 
-          <n-form-item label="Công Việc" path="job">
-            <n-input v-model:value="form.job" placeholder="Công việc người vay"/>
-          </n-form-item>
+      <n-form-item label="Thu Nhập Hằng Tháng" path="income">
+        <n-select v-model:value="form.income" :options="inComeColumes" placeholder="Thu nhập hằng tháng" />
+      </n-form-item>
 
-          <n-form-item label="Thu Nhập Hằng Tháng" path="income">
-            <n-select v-model:value="form.income" :options="inComeColumes" placeholder="Thu nhập hằng tháng" />
-          </n-form-item>
+      <n-form-item label="Tình Trạng Hôn Nhân" path="marriage">
+        <n-select v-model:value="form.marriage" :options="marriageColumes" placeholder="Tình trạng hôn nhân" />
+      </n-form-item>
 
-          <n-form-item label="Tình Trạng Hôn Nhân" path="marriage">
-            <n-select v-model:value="form.marriage" :options="marriageColumes" placeholder="Tình trạng hôn nhân" />
-          </n-form-item>
-
-          <n-form-item label="Mục Đích Vay Vốn" path="purpose">
-            <n-input
-                v-model:value="form.purpose"
-                type="textarea"
-                placeholder=""
-            />
-          </n-form-item>
-        </n-form>
-      </n-spin>
-    </div>
-
+      <n-form-item label="Mục Đích Vay Vốn" path="purpose">
+        <n-input
+            v-model:value="form.purpose"
+            type="textarea"
+            placeholder=""
+            @keydown.enter="debouncedUpdate"
+        />
+      </n-form-item>
+    </n-form>
   </div>
 </template>
 
@@ -159,7 +149,7 @@ const { mutate, loading } = useMutation<AdminUpdateInfo, AdminUpdateInfoVariable
 const submit = () => {
   formRef.value?.validate((errors) => {
     if (errors) {
-      return message.success('Vui lòng nhập đầy đủ thông tin')
+      throw new Error('Form validate error')
     }
     const { __typename, id, ...data } = toRaw(form.value)
     mutate({
@@ -170,6 +160,21 @@ const submit = () => {
     })
   })
 }
+
+const debouncedUpdate = useDebounceFn(async () => {
+  try {
+    await submit()
+    message.success('Cập nhật thành công')
+  } catch (e) {
+    // console.log(e)
+  }
+}, 500)
+
+
+defineExpose({
+  submit,
+  loading
+})
 </script>
 
 <style scoped></style>

@@ -41,6 +41,20 @@ export enum UserRole {
   USER = "USER",
 }
 
+export interface AdminGetBankFilter {
+  user: string;
+}
+
+export interface AdminGetLogbooksFilter {
+  group?: LOGBOOK_GROUP[] | null;
+  limit: number;
+  offset: number;
+  sort: string;
+  status?: LOGBOOK_STATUS[] | null;
+  type?: LOGBOOK_TYPE[] | null;
+  user?: string | null;
+}
+
 export interface AdminUpdateUserInput {
   avatar?: string | null;
   balance?: number | null;
@@ -53,6 +67,25 @@ export interface AdminUpdateUserInput {
 export interface CreateCollaboratorInput {
   fanpage: string;
   name: string;
+}
+
+export interface CreateLogbookInput {
+  amount: number;
+  content?: string | null;
+  effective: boolean;
+  group: LOGBOOK_GROUP;
+  note?: string | null;
+  status: LOGBOOK_STATUS;
+  type: LOGBOOK_TYPE;
+  user: string;
+}
+
+export interface DeleteLogbookInput {
+  id: string;
+}
+
+export interface GetBankFilter {
+  id: string;
 }
 
 export interface GetCollaboratorFilter {
@@ -80,15 +113,6 @@ export interface GetLoansFilter {
   sort: string;
 }
 
-export interface GetLogbooksFilter {
-  group?: LOGBOOK_GROUP[] | null;
-  limit: number;
-  offset: number;
-  sort: string;
-  status?: LOGBOOK_STATUS[] | null;
-  type?: LOGBOOK_TYPE[] | null;
-}
-
 export interface GetUserFilter {
   id: string;
 }
@@ -107,17 +131,18 @@ export interface RangeUsersFilter {
   start: number;
 }
 
+export interface UpdateBankInput {
+  account: string;
+  bank: string;
+  id: string;
+  name: string;
+}
+
 export interface UpdateCollaboratorInput {
   fanpage?: string | null;
   id: string;
   name?: string | null;
   status?: COLLABORATOR_STATUS | null;
-}
-
-export interface UpdateIdentityInput {
-  avatar: string;
-  back: string;
-  front: string;
 }
 
 export interface UpdateInfoInput {
@@ -137,7 +162,19 @@ export interface UpdateLoanInput {
   amount?: number | null;
   interest?: number | null;
   months?: number | null;
+  signature?: string | null;
+  status?: LoanStatus | null;
   user: string;
+}
+
+export interface UpdateLogbookInput {
+  amount?: number | null;
+  content?: string | null;
+  group?: LOGBOOK_GROUP | null;
+  id: string;
+  note?: string | null;
+  status?: LOGBOOK_STATUS | null;
+  type?: LOGBOOK_TYPE | null;
 }
 
 export interface UpdateWithdrawInput {

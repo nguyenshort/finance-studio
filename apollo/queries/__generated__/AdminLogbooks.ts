@@ -3,7 +3,7 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { GetLogbooksFilter, LOGBOOK_GROUP, LOGBOOK_STATUS, LOGBOOK_TYPE } from "./../../__generated__/serverTypes";
+import { AdminGetLogbooksFilter, LOGBOOK_GROUP, LOGBOOK_STATUS, LOGBOOK_TYPE } from "./../../__generated__/serverTypes";
 
 // ====================================================
 // GraphQL query operation: AdminLogbooks
@@ -64,5 +64,5 @@ export interface AdminLogbooks {
 }
 
 export interface AdminLogbooksVariables {
-  filter: GetLogbooksFilter;
+  filter: AdminGetLogbooksFilter;
 }

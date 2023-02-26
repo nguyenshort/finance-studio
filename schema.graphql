@@ -38,6 +38,22 @@ directive @connection(
   filter: [String!]
 ) on FIELD
 
+input AdminGetBankFilter {
+  user: ID!
+}
+
+input AdminGetLogbooksFilter {
+  group: [LOGBOOK_GROUP!] = [LOAN, WITHDRAW]
+  limit: Int!
+  offset: Int!
+
+  """Sắp xếp của bình luận"""
+  sort: String!
+  status: [LOGBOOK_STATUS!] = [PENDING, APPROVED, REJECTED]
+  type: [LOGBOOK_TYPE!] = [ADD, SUBTRACT]
+  user: ID
+}
+
 input AdminUpdateUserInput {
   avatar: String
   balance: Float
@@ -107,9 +123,28 @@ input CreateLoanInput {
   months: Int!
 }
 
+input CreateLogbookInput {
+  amount: Float!
+  content: String = ""
+  effective: Boolean!
+  group: LOGBOOK_GROUP!
+  note: String = ""
+  status: LOGBOOK_STATUS!
+  type: LOGBOOK_TYPE!
+  user: ID!
+}
+
 input CreateWithdrawInput {
   """Example field (placeholder)"""
   amount: Float!
+}
+
+input DeleteLogbookInput {
+  id: ID!
+}
+
+input GetBankFilter {
+  id: ID!
 }
 
 input GetCollaboratorFilter {
@@ -261,9 +296,15 @@ enum LOGBOOK_TYPE {
 }
 
 type Mutation {
+  adminCreateLogbook(input: CreateLogbookInput!): Logbook!
+  adminDeleteLogbook(input: DeleteLogbookInput!): Logbook!
+  adminUpdateBank(input: UpdateBankInput!): Bank!
   adminUpdateInfo(input: UpdateInfoInput!): Info!
   adminUpdateLoan(input: UpdateLoanInput!): Loan!
+  adminUpdateLogbook(input: UpdateLogbookInput!): Logbook!
   adminUpdateUser(input: AdminUpdateUserInput!): User!
+
+  """Cannot effect to user balance"""
   adminUpdateWithdraw(input: UpdateWithdrawInput!): Logbook!
   createBank(input: CreateBankInput!): Bank!
   createCollaborator(input: CreateCollaboratorInput!): Collaborator!
@@ -290,10 +331,12 @@ type Notify {
 }
 
 type Query {
+  adminBank(filter: GetBankFilter!): Bank
+  adminIdentity(filter: AdminGetBankFilter!): Identity
   adminInfo(filter: GetInfoFilter!): Info
   adminLoan(filter: GetLoanFilter!): Loan
   adminLoans(filter: GetLoansFilter!): [Loan!]!
-  adminLogbooks(filter: GetLogbooksFilter!): [Logbook!]!
+  adminLogbooks(filter: AdminGetLogbooksFilter!): [Logbook!]!
   adminRangeUsers(filter: RangeUsersFilter!): [User!]!
   adminUser(filter: GetUserFilter!): User!
   bank: Bank
@@ -320,6 +363,13 @@ input SignLoanInput {
 type Subscription {
   """Nhận thông báo"""
   subNotify: Notify!
+}
+
+input UpdateBankInput {
+  account: String!
+  bank: String!
+  id: ID!
+  name: String!
 }
 
 input UpdateCollaboratorInput {
@@ -358,7 +408,19 @@ input UpdateLoanInput {
   amount: Float
   interest: Float
   months: Int
+  signature: String
+  status: LoanStatus
   user: ID!
+}
+
+input UpdateLogbookInput {
+  amount: Float
+  content: String = ""
+  group: LOGBOOK_GROUP
+  id: ID!
+  note: String = ""
+  status: LOGBOOK_STATUS
+  type: LOGBOOK_TYPE
 }
 
 input UpdateWithdrawInput {

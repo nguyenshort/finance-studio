@@ -12,3 +12,53 @@ export const CHANGE_COLLABORATOR = gql`
     }
   }
 `
+
+export const UPDATE_BANK = gql`
+  mutation AdminUpdateBank($input: UpdateBankInput!) {
+    adminUpdateBank(input: $input) {
+      id
+      name
+      bank
+      account
+    }
+  }
+`
+
+
+export const DELETE_LOGBOOK = gql`
+  mutation AdminDeleteLogbook($input: DeleteLogbookInput!) {
+    adminDeleteLogbook(input: $input) {
+      id
+    }
+  }
+`
+
+export const CREATE_LOGBOOK = gql`
+  mutation AdminCreateLogbook($input: CreateLogbookInput!) {
+    adminCreateLogbook(input: $input) {
+      id
+      amount
+      content
+      note
+      group
+      status
+      type
+      createdAt
+    }
+  }
+`
+
+export const UPDATE_LOGBOOK = gql`
+  mutation AdminUpdateLogbook($input: UpdateLogbookInput!) {
+    adminUpdateLogbook(input: $input) {
+      id
+      amount
+      content
+      note
+      group
+      status
+      type
+      createdAt
+    }
+  }
+`

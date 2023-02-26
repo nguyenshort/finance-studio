@@ -7,6 +7,8 @@ export const UPDATE_LOAN = gql`
       amount
       interest
       months
+      signature
+      status
     }
   }
 `

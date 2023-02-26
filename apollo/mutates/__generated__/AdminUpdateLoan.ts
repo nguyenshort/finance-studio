@@ -3,7 +3,7 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { UpdateLoanInput } from "./../../__generated__/serverTypes";
+import { UpdateLoanInput, LoanStatus } from "./../../__generated__/serverTypes";
 
 // ====================================================
 // GraphQL mutation operation: AdminUpdateLoan
@@ -24,6 +24,14 @@ export interface AdminUpdateLoan_adminUpdateLoan {
    * Thời Gian Vay
    */
   months: number;
+  /**
+   * Image chữ ký
+   */
+  signature: string;
+  /**
+   * Trạng thái khoản vay
+   */
+  status: LoanStatus;
 }
 
 export interface AdminUpdateLoan {

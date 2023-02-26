@@ -21,7 +21,7 @@
         <n-form-item label="Số tiền" path="amount">
           <n-input-number :min="1" v-model:value="form.amount" placeholder="Nhập số tiền rút"/>
         </n-form-item>
-        <n-form-item label="Nội dung rút tiền" path="note">
+        <n-form-item label="Gi chú rút tiền" path="note">
           <n-input v-model:value="form.note" placeholder="Gi chú giao dịch"/>
         </n-form-item>
 

@@ -1,10 +1,12 @@
 import { gql } from '#imports'
 
-export const IDENTITY_DOC = gql`
-  fragment IdentityDoc on Identity {
-    id
-    front
-    back
-    avatar
+export const GET_ID = gql`
+  query AdminIdentity($filter: AdminGetBankFilter!) {
+    adminIdentity(filter: $filter) {
+      id
+      avatar
+      back
+      front
+    }
   }
 `

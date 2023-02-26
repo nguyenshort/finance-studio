@@ -60,7 +60,7 @@ const [showFilter, toggleFilter] = useToggle(false)
 
 const initRange = (): [number, number] => {
   const now = Date.now()
-  const start = $dayjs(now).subtract(1, 'month').valueOf()
+  const start = $dayjs(now).subtract(1, 'day').valueOf()
   return [start, now]
 }
 

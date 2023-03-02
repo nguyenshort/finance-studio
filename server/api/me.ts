@@ -2,14 +2,6 @@ import { defineEventHandler, getHeader, createError, deleteCookie } from 'h3'
 
 export default defineEventHandler(async (event) => {
   const runtimeConfig = useRuntimeConfig()
-
-  const removeAll = () => {
-    const cookies = parseCookies(event)
-    Object.keys(cookies).forEach((key) => {
-        deleteCookie(event, key)
-    })
-  }
-
   try {
     const token = getHeader(event, 'Authorization')
 
@@ -20,7 +12,7 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    const user = await $fetch<{ token: string }>(new URL('/auth', runtimeConfig.public.apiBackend).href, {
+    const user = await $fetch<{ _id: string, role: number }>(new URL('/auth', runtimeConfig.public.apiBackend).href, {
       headers: {
         Authorization: token
       }

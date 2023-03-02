@@ -78,6 +78,7 @@ import {
   AdminUpdateUserBalance,
   AdminUpdateUserBalanceVariables
 } from "~/apollo/mutates/__generated__/AdminUpdateUserBalance";
+import {AdminUpdateUserInput, UpdateBankInput} from "~/apollo/__generated__/serverTypes";
 
 const props = defineProps<{
   initData: AdminBank_adminBank
@@ -125,32 +126,24 @@ const banks = computed<SelectMixedOption[]>(() => {
 
 const { mutate, loading } = useMutation<UpdateBank, UpdateBankVariables>(UPDATE_BANK)
 
-const submit = async () => {
-  formRef.value?.validate((errors) => {
-    if (errors) {
-      throw new Error('Form is not valid')
-    }
-    mutate({
-      input: {
+const submitBank = async () => {
+  // covert callback to promise
+  return new Promise<UpdateBankInput>((resolve, reject) => {
+    formRef.value?.validate((errors) => {
+      if (errors) {
+        reject(new Error('Form is not valid'))
+      }
+      resolve({
         account: form.value.account,
         bank: form.value.bank,
         name: form.value.name,
         id: form.value.id
-      }
+      })
     })
   })
 }
 
 const message = useMessage()
-const debouncedUpdate = useDebounceFn(async () => {
-  try {
-    await submit()
-    message.success('Cập nhật thành công')
-  } catch (e) {
-    // console.log(e)
-  }
-}, 500)
-
 const route = useRoute()
 const { result } = useQuery<AdminIdentity, AdminIdentityVariables>(GET_ID, {
   filter: {
@@ -164,6 +157,11 @@ const formRef2 = ref<FormInst>()
 const { refetch, onResult } = useQuery<AdminUserBalance, AdminUserBalanceVariables>(GET_USER_BALANCE, {
   filter: {
     id: route.params.id as string
+  }
+})
+onResult((res) => {
+  if(res.data?.adminUser) {
+    form2.value.balance = res.data.adminUser.balance
   }
 })
 const form2 = ref({
@@ -185,29 +183,49 @@ const rules2 = computed<FormRules>(() => ({
 }))
 
 const { mutate: updateBalance } = useMutation<AdminUpdateUserBalance, AdminUpdateUserBalanceVariables>(CHANGE_BALANCE)
-
-const debouncedUpdate2 = useDebounceFn(async () => {
-  formRef2.value?.validate(async (errors) => {
-    if (errors) {
-      throw new Error('Form is not valid')
-    }
-    await updateBalance({
-      input: {
+const submitBalance = async () => {
+  return new Promise<AdminUpdateUserInput>((resolve, reject) => {
+    formRef2.value?.validate((errors) => {
+      if (errors) {
+        reject(new Error('Form is not valid'))
+      }
+      resolve({
         user: route.params.id as string,
         balance: form2.value.balance
-      }
+      })
+    })
+  })
+}
+/**
+ * Debounce function
+ */
+const debouncedUpdate = useDebounceFn(async () => {
+  try {
+    const data = await submitBank()
+    await mutate({
+      input: data
     })
     message.success('Cập nhật thành công')
-  })
+  } catch (e) {
+    //
+  }
+}, 500)
+const debouncedUpdate2 = useDebounceFn(async () => {
+  try {
+    const data = await submitBalance()
+    await updateBalance({
+      input: data
+    })
+    message.success('Cập nhật thành công')
+  } catch (e) {
+    //
+  }
 }, 500)
 
 
-onResult((res) => {
-  if(res.data?.adminUser) {
-    form2.value.balance = res.data.adminUser.balance
-  }
-})
-
+/**
+ * Event bus
+ */
 const bus = useEventBus<string>('balance')
 bus.on((event) => {
   if(event === 'refresh') {
@@ -218,7 +236,7 @@ bus.on((event) => {
 })
 
 defineExpose({
-  submit,
+  submit: submitBank,
   loading
 })
 </script>

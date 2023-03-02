@@ -144,6 +144,7 @@ const submit = async () => {
 const quickApprove = async () => {
   try {
     await formLoanRef.value?.quickApprove()
+    logBookBus.emit('refresh')
   } catch (e) {
     console.log(e)
     //

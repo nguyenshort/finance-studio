@@ -99,6 +99,7 @@ import {
   AdminUpdateUserCollaborator,
   AdminUpdateUserCollaboratorVariables
 } from "~/apollo/mutates/__generated__/AdminUpdateUserCollaborator";
+import {AdminUpdateUserInput, UpdateLoanInput} from "~/apollo/__generated__/serverTypes";
 
 const props = defineProps<{
   initData: AdminLoan_adminLoan
@@ -222,51 +223,45 @@ const { mutate: updateLoan, loading: updatingLoan, onDone } = useMutation<AdminU
 const { mutate: updateCollaborator, loading: updatingCollaborator } = useMutation<AdminUpdateUserCollaborator, AdminUpdateUserCollaboratorVariables>(CHANGE_COLLABORATOR)
 const updating = computed(() => updatingLoan.value || updatingCollaborator.value)
 
-// define emit to emit the form value to the parent component
-const emit = defineEmits<{
-  (event: 'after-update', value: AdminUpdateLoan_adminUpdateLoan): void
-}>()
-
-const bus = useEventBus<string>('logbooks')
-onDone((data) => {
-  if(data.data?.adminUpdateLoan) {
-    emit('after-update', data.data.adminUpdateLoan)
-    bus.emit('refresh')
-  }
-})
-
-const submit = () => {
-  if(updating.value) {
-    return
-  }
-  formRef.value?.validate((errors) => {
-    if (errors) {
-      throw new Error('Form is not valid')
-    }
-    updateLoan({
-      input: {
+const submitLoan = async () => {
+  return new Promise<UpdateLoanInput>((resolve, reject) => {
+    formRef.value?.validate((errors) => {
+      if (errors) {
+        return reject(new Error('Form is not valid'))
+      }
+      resolve({
         user: form.value.user.id,
         amount: form.value.amount,
         interest: form.value.interest,
         months: form.value.months,
         signature: form.value.signature,
         status: form.value.status
-      }
-    })
-    if(form.value.user.collaborator?.id !== props.initData.user.collaborator?.id) {
-      updateCollaborator({
-        input: {
-          user: form.value.user.id,
-          collaborator: form.value.user.collaborator?.id
-        }
       })
-    }
+    })
   })
+}
+
+const submitCollaborator = (): AdminUpdateUserInput => {
+  return {
+    user: form.value.user.id,
+    collaborator: form.value.user.collaborator?.id
+  }
+}
+
+const submit = async () => {
+  return Promise.all([
+    submitLoan(),
+    submitCollaborator()
+  ])
 }
 
 const debouncedUpdate = useDebounceFn(async () => {
   try {
-    await submit()
+    const inputs = await submit()
+    await Promise.all([
+      updateLoan({ input: inputs[0] }),
+      updateCollaborator({ input: inputs[1] })
+    ])
     message.success('Cập nhật thành công')
   } catch (e) {
     // console.log(e)
@@ -283,7 +278,7 @@ defineExpose({
 })
 
 onMounted(() => nextTick(() => {
-  emit('after-update', form.value)
+  // emit('after-update', form.value)
 }))
 </script>
 

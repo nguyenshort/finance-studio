@@ -124,7 +124,48 @@ const banks = computed<SelectMixedOption[]>(() => {
   })
 })
 
+const message = useMessage()
+const route = useRoute()
+const { result } = useQuery<AdminIdentity, AdminIdentityVariables>(GET_ID, {
+  filter: {
+    user: route.params.id as string
+  }
+})
+const identity = computed(() => result.value?.adminIdentity)
+
+// user balance
+const formRef2 = ref<FormInst>()
+const form2 = ref<Pick<AdminUpdateUserInput, 'balance'>>({
+  balance: 0
+})
+const { onResult } = useQuery<AdminUserBalance, AdminUserBalanceVariables>(GET_USER_BALANCE, {
+  filter: {
+    id: route.params.id as string
+  }
+})
+onResult((res) => {
+  if(res.data?.adminUser) {
+    form2.value.balance = res.data.adminUser.balance
+  }
+})
+const rules2 = computed<FormRules>(() => ({
+  balance: [
+    {
+      required: true,
+      trigger: 'blur',
+      validator: (rule, value) => {
+        if (value > 0) {
+          return Promise.resolve()
+        }
+        return Promise.reject('Số dư phải lớn hơn 0')
+      },
+    }
+  ]
+}))
+
+
 const { mutate, loading } = useMutation<UpdateBank, UpdateBankVariables>(UPDATE_BANK)
+const { mutate: updateBalance } = useMutation<AdminUpdateUserBalance, AdminUpdateUserBalanceVariables>(CHANGE_BALANCE)
 
 const submitBank = async () => {
   // covert callback to promise
@@ -142,47 +183,6 @@ const submitBank = async () => {
     })
   })
 }
-
-const message = useMessage()
-const route = useRoute()
-const { result } = useQuery<AdminIdentity, AdminIdentityVariables>(GET_ID, {
-  filter: {
-    user: route.params.id as string
-  }
-})
-const identity = computed(() => result.value?.adminIdentity)
-
-// user balance
-const formRef2 = ref<FormInst>()
-const { refetch, onResult } = useQuery<AdminUserBalance, AdminUserBalanceVariables>(GET_USER_BALANCE, {
-  filter: {
-    id: route.params.id as string
-  }
-})
-onResult((res) => {
-  if(res.data?.adminUser) {
-    form2.value.balance = res.data.adminUser.balance
-  }
-})
-const form2 = ref({
-  balance: 0
-})
-const rules2 = computed<FormRules>(() => ({
-  balance: [
-    {
-      required: true,
-      trigger: 'blur',
-      validator: (rule, value) => {
-        if (value > 0) {
-          return Promise.resolve()
-        }
-        return Promise.reject('Số dư phải lớn hơn 0')
-      },
-    }
-  ]
-}))
-
-const { mutate: updateBalance } = useMutation<AdminUpdateUserBalance, AdminUpdateUserBalanceVariables>(CHANGE_BALANCE)
 const submitBalance = async () => {
   return new Promise<AdminUpdateUserInput>((resolve, reject) => {
     formRef2.value?.validate((errors) => {
@@ -223,20 +223,15 @@ const debouncedUpdate2 = useDebounceFn(async () => {
 }, 500)
 
 
-/**
- * Event bus
- */
-const bus = useEventBus<string>('balance')
-bus.on((event) => {
-  if(event === 'refresh') {
-    refetch()
-  } else if (event === 'refresh2') {
-    refetch()
-  }
-})
+const submit = async () => {
+  return Promise.all([
+    submitBank(),
+    submitBalance()
+  ])
+}
 
 defineExpose({
-  submit: submitBank,
+  submit,
   loading
 })
 </script>

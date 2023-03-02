@@ -1,6 +1,6 @@
 <template>
   <div>
-    <bar-chart :chart-data="testData" />
+    <bar-chart :chart-data="dataChart" />
 
     <div class="mt-5">
       <n-h4>Bảng Số Liệu</n-h4>
@@ -49,27 +49,49 @@ interface ChartData {
   }[]
 }
 
-interface GenerateChartOptions {
-  format: string
-}
-const filterChart = ({ format }: GenerateChartOptions) =>  {
+const filterChart = () =>  {
   // 1 day => filter by hour
-  const start = Number($dayjs(props.range[0]).format(format))
-  const end = Number($dayjs(props.range[1]).format(format))
+  const start = props.range[0]
+  const end = props.range[1]
 
-  const labels = Array.from({ length: end - start + 1 }, (_, i) => (i + start))
-
+  const countHours = (end - start) / (1000 * 60 * 60)
+  const labels: number[] = []
   const sources: ({ total: number, signed: number, notSigned: number  })[] = []
 
-  labels.forEach(_time => {
-    const _total = users.value.filter(user => dayjs(user.createdAt).format(format) === _time.toString())
-    const _signed = _total.filter((user) => user.loan?.signature)
-    sources.push({
-      total: _total.length,
-      signed: _signed.length,
-      notSigned: _total.length - _signed.length
+  const filtterSource = (format: string) => {
+    labels.forEach(_step => {
+      const _total = users.value.filter(user => dayjs(user.createdAt).format(format) === _step.toString())
+      const _signed = _total.filter((user) => user.loan?.signature)
+      sources.push({
+        total: _total.length,
+        signed: _signed.length,
+        notSigned: _total.length - _signed.length
+      })
     })
-  })
+  }
+
+  if(countHours <= 24) {
+    for (let t = start; t <= end; t += 60 * 60 * 1000) {
+      const hour = dayjs(t).hour()
+      labels.push(hour)
+    }
+    filtterSource('H')
+  } else if(countHours <= 31 * 24) {
+    for (let t = start; t <= end; t += 24 * 60 * 60 * 1000) {
+      const day = dayjs(t).date()
+      labels.push(day)
+    }
+    filtterSource('D')
+  } else {
+    for (let t = start; t <= end; t += 30 * 24 * 60 * 60 * 1000) {
+      const month = dayjs(t).month()
+      labels.push(month)
+    }
+    filtterSource('M')
+  }
+
+  console.log('labels', labels)
+
 
   const datasets = [
     {
@@ -94,13 +116,5 @@ const filterChart = ({ format }: GenerateChartOptions) =>  {
     datasets
   }
 }
-const testData = computed<ChartData>(() => {
-  if (props.range[1] - props.range[0] <= 86400000) {
-    return filterChart({ format: 'H' })
-  } else if (props.range[1] - props.range[0] <= 2592000000) {
-    return filterChart({ format: 'D' })
-  } else {
-    return filterChart({ format: 'M' })
-  }
-})
+const dataChart = computed<ChartData>(() => filterChart())
 </script>

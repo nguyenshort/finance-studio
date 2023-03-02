@@ -221,13 +221,7 @@ const submit = () => {
     }
 
     toggle(false)
-
     bus2.emit('refresh')
-
-    setTimeout(() => {
-      bus3.emit('refresh2')
-    }, 1000)
-
   })
 }
 

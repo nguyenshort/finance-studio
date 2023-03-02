@@ -72,6 +72,7 @@
         </n-button>
       </template>
     </n-modal>
+
   </div>
 </template>
 
@@ -200,7 +201,7 @@ const upload = useUpload()
 const loadingUpload = ref(false)
 const insertNewSignature = async () => {
   loadingUpload.value = true
- if(signaturePadRef.value) {
+  if(signaturePadRef.value) {
     const { isEmpty, data } = signaturePadRef.value.saveSignature()
     if(isEmpty) {
       return message.error('Vui lòng thêm chữ ký')
@@ -270,7 +271,6 @@ const debouncedUpdate = useDebounceFn(async () => {
 
 defineExpose({
   submit,
-  loading: updating,
   quickApprove: async () => {
     form.value.status = LoanStatus.APPROVED
     await debouncedUpdate()

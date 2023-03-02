@@ -138,11 +138,11 @@ const formRef2 = ref<FormInst>()
 const form2 = ref<Pick<AdminUpdateUserInput, 'balance'>>({
   balance: 0
 })
-const { onResult } = useQuery<AdminUserBalance, AdminUserBalanceVariables>(GET_USER_BALANCE, {
+const { onResult, refetch } = useQuery<AdminUserBalance, AdminUserBalanceVariables>(GET_USER_BALANCE, {
   filter: {
     id: route.params.id as string
   }
-})
+}, { fetchPolicy: 'network-only' })
 onResult((res) => {
   if(res.data?.adminUser) {
     form2.value.balance = res.data.adminUser.balance
@@ -154,7 +154,7 @@ const rules2 = computed<FormRules>(() => ({
       required: true,
       trigger: 'blur',
       validator: (rule, value) => {
-        if (value > 0) {
+        if (value >= 0) {
           return Promise.resolve()
         }
         return Promise.reject('Số dư phải lớn hơn 0')
@@ -230,9 +230,16 @@ const submit = async () => {
   ])
 }
 
+const listener = (event: string) => {
+  if(event === 'refresh') {
+    refetch()
+  }
+}
+const balanceBus = useEventBus<string>('balance')
+balanceBus.on(listener)
+
 defineExpose({
-  submit,
-  loading
+  submit
 })
 </script>
 

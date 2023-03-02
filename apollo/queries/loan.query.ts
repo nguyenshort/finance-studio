@@ -21,6 +21,15 @@ export const GET_LOAN = gql`
     }
 `
 
+export const GET_LOAN_STATUS = gql`
+    query AdminLoanStatus($filter: GetLoanFilter!) {
+        adminLoan(filter: $filter) {
+            id
+            status
+        }
+    }
+`
+
 export const GET_COLLABORATORS_FOR_LOAN = gql`
     query FormCollaborators($filter: GetCollaboratorsFilter!) {
         collaborators(filter: $filter) {

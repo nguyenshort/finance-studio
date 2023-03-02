@@ -59,6 +59,7 @@ import {AdminInfo_adminInfo} from "~/apollo/queries/__generated__/AdminInfo"
 import {FormRules} from "naive-ui/es/form/src/interface";
 import {FormInst} from "naive-ui";
 import {AdminUpdateInfo, AdminUpdateInfoVariables} from "~/apollo/mutates/__generated__/AdminUpdateInfo"
+import {UpdateInfoInput} from "~/apollo/__generated__/serverTypes";
 
 const props = defineProps<{
   initData: AdminInfo_adminInfo
@@ -146,24 +147,27 @@ const rules = computed<FormRules>(() => ({
 const formRef = ref<FormInst>()
 
 const { mutate, loading } = useMutation<AdminUpdateInfo, AdminUpdateInfoVariables>(UPDATE_INFO)
-const submit = () => {
-  formRef.value?.validate((errors) => {
-    if (errors) {
-      throw new Error('Form validate error')
-    }
-    const { __typename, id, ...data } = toRaw(form.value)
-    mutate({
-      input: {
+const submit = async () => {
+  return new Promise<UpdateInfoInput>((resolve, reject) => {
+    formRef.value?.validate((errors) => {
+      if (errors) {
+        reject(new Error('Form validate error'))
+      }
+      const { __typename, id, ...data } = toRaw(form.value)
+      resolve({
         ...toRaw(data),
         user: String(route.params.id)
-      }
+      })
     })
   })
 }
 
 const debouncedUpdate = useDebounceFn(async () => {
   try {
-    await submit()
+    const input = await submit()
+    mutate({
+      input
+    })
     message.success('Cập nhật thành công')
   } catch (e) {
     // console.log(e)
@@ -172,8 +176,7 @@ const debouncedUpdate = useDebounceFn(async () => {
 
 
 defineExpose({
-  submit,
-  loading
+  submit
 })
 </script>
 

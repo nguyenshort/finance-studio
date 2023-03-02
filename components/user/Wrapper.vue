@@ -4,7 +4,7 @@
     <n-spin :show="loading">
       <div class="flex -mx-4 -mt-4">
         <user-verify-form v-if="contract" :init-data="contract" class="w-1/3 px-4" ref="formVerifyRef" />
-        <user-loan-form v-if="loan" :init-data="loan" class="w-1/3 px-4" ref="formLoanRef" @after-update="changeLoanStatus" />
+        <user-loan-form v-if="loan" :init-data="loan" class="w-1/3 px-4" ref="formLoanRef" />
         <user-bank-form v-if="bank" :init-data="bank" class="w-1/3 px-4" ref="formBankRef" />
       </div>
 
@@ -19,7 +19,7 @@
      <div class="flex items-center">
 
        <n-popconfirm
-           v-if="loanStatus === LoanStatus.PENDING"
+           v-if="status === LoanStatus.PENDING"
            @positive-click="quickApprove"
        >
          <template #trigger>
@@ -32,13 +32,13 @@
 
        <div class="w-3"></div>
 
-       <n-button type="success" @click="bus.emit('add')" :disabled="loading">
+       <n-button type="success" @click="notifyBus.emit('add')" :disabled="loading">
          Thêm Tiền
        </n-button>
 
        <div class="w-3"></div>
 
-       <n-button type="success" @click="bus.emit('subtract')" :disabled="loading">
+       <n-button type="success" @click="notifyBus.emit('subtract')" :disabled="loading">
          Trừ Tiền
        </n-button>
 
@@ -56,15 +56,22 @@
 </template>
 
 <script lang="ts" setup>
-import {AdminLoan} from "~/apollo/queries/__generated__/AdminLoan";
+import {AdminLoan, AdminLoanVariables} from "~/apollo/queries/__generated__/AdminLoan";
 import {AdminInfo} from "~/apollo/queries/__generated__/AdminInfo";
 import {GET_INFO} from "~/apollo/queries/info.query";
 import {ADMIN_BANK} from "~/apollo/queries/bank.query";
 import {AdminBank} from "~/apollo/queries/__generated__/AdminBank";
-import {Ref} from "vue";
 import {LoanStatus} from "#imports";
-import {AdminUpdateLoan_adminUpdateLoan} from "~/apollo/mutates/__generated__/AdminUpdateLoan";
-import {UpdateLogbookInput} from "~/apollo/__generated__/serverTypes";
+import {
+  AdminUpdateUserInput, UpdateBankInput,
+  UpdateInfoInput,
+  UpdateLoanInput,
+  UpdateLogbookInput
+} from "~/apollo/__generated__/serverTypes";
+import {UPDATE_EXTRA} from "~/apollo/mutates/user.mutate";
+import {UpdateCompile, UpdateCompileVariables} from "~/apollo/mutates/__generated__/UpdateCompile";
+import {GET_LOAN_STATUS} from "~/apollo/queries/loan.query";
+import {AdminLoanStatus} from "~/apollo/queries/__generated__/AdminLoanStatus";
 
 /**
  * Section: Get contract data
@@ -90,64 +97,59 @@ const { data: bankData } = await useAsyncQuery<AdminBank>(ADMIN_BANK, {
 })
 const bank = computed(() => bankData.value?.adminBank)
 
+const { result: dataStatus } = useQuery<AdminLoanStatus, AdminLoanVariables>(GET_LOAN_STATUS, {
+  filter: {user: String(route.params.id)}
+})
+const status = computed(() => dataStatus.value?.adminLoan?.status)
+
 // Ref Form
-interface FormRef {
-  submit: () => Promise<void>
-  loading: Ref<boolean>
+interface FormRef<T> {
+  submit: () => Promise<T>
 }
-const formVerifyRef = ref<FormRef>()
-const formLoanRef = ref<FormRef & {
+interface FormLoanRef extends FormRef<[UpdateLoanInput, AdminUpdateUserInput]> {
   quickApprove: () => Promise<void>
-}>()
-const formBankRef = ref<FormRef>()
+}
+
+const formVerifyRef = ref<FormRef<UpdateInfoInput>>()
+const formLoanRef = ref<FormLoanRef>()
+const formBankRef = ref<FormRef<[UpdateBankInput, AdminUpdateUserInput]>>()
 const tableRef = ref<{ refresh: () => Promise<void> }>()
-
-const [loading, toggleLoading] = useToggle(false)
-
 const message = useMessage()
+
+const { loading, mutate } = useMutation<UpdateCompile, UpdateCompileVariables>(UPDATE_EXTRA)
+const logBookBus = useEventBus<string>('logbooks')
 const submit = async () => {
-  toggleLoading()
   try {
-    await Promise.all([
-      formVerifyRef.value?.submit(),
-      formLoanRef.value?.submit(),
-      formBankRef.value?.submit()
+    const inputs = await Promise.all([
+      formVerifyRef.value!.submit(),
+      formLoanRef.value!.submit(),
+      formBankRef.value!.submit()
     ])
+    const [info, loan, bank] = inputs
+    await mutate({
+      input: info,
+      input1: loan[0],
+      input2: {
+        ...loan[1],
+        ...bank[1]
+      },
+      input3: bank[0],
+    })
+    logBookBus.emit('refresh')
     message.success('Cập nhật thành công')
   } catch (e) {
     message.error('Kiểm tra lại thông tin')
   }
-  toggleLoading()
 }
-
-const { $apollo } = useNuxtApp()
-
 const quickApprove = async () => {
   try {
     await formLoanRef.value?.quickApprove()
-    // override cache by using apollo cache.writeQuery
-    // $apollo.defaultClient.cache.writeQuery({
-    //   query: GET_LOAN,
-    //   data: {
-    //     adminLoan: {
-    //       ...loan.value,
-    //       status: LoanStatus.APPROVED
-    //     }
-    //   }
-    // })
-    // refresh table
   } catch (e) {
     console.log(e)
     //
   }
 }
-
-const loanStatus = ref<LoanStatus>(LoanStatus.APPROVED)
-const changeLoanStatus = async ({ status }: AdminUpdateLoan_adminUpdateLoan) => {
-  loanStatus.value = status
-}
-
-const bus = useEventBus<string, (UpdateLogbookInput | undefined )>('modify-logbook')
+const notifyBus = useEventBus<string, (UpdateLogbookInput | undefined )>('modify-logbook')
 </script>
 
 <style scoped></style>

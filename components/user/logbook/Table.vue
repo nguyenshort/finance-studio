@@ -109,7 +109,9 @@ const bus2 = useEventBus<string>('balance')
 const listener = (event: string) => {
   if(event === 'refresh') {
     refresh()
-    bus2.emit('refresh')
+    setTimeout(() => {
+      bus2.emit('refresh')
+    }, 1000)
   }
 }
 bus.on(listener)

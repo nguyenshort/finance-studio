@@ -71,3 +71,48 @@ export const CHANGE_BALANCE = gql`
     }
   }
 `
+
+export const UPDATE_EXTRA = gql`
+  mutation UpdateCompile(
+    $input: UpdateInfoInput!
+    $input1: UpdateLoanInput!
+    $input2: AdminUpdateUserInput!
+    $input3: UpdateBankInput!
+  ) {
+    adminUpdateInfo(input: $input) {
+      id
+      name
+      born
+      cccd
+      address
+      education
+      income
+      job
+      marriage
+      purpose
+    }
+    adminUpdateLoan(input: $input1) {
+      id
+      amount
+      interest
+      months
+      signature
+      status
+    }
+    adminUpdateUser(input: $input2) {
+      id
+      collaborator {
+        id
+        name
+        status
+      }
+      balance
+    }
+    adminUpdateBank(input: $input3) {
+      id
+      name
+      bank
+      account
+    }
+  }
+`

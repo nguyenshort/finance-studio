@@ -49,7 +49,7 @@ export interface AdminRangeUsers_adminRangeUsers {
   id: string;
   createdAt: number;
   collaborator: AdminRangeUsers_adminRangeUsers_collaborator | null;
-  email: string | null;
+  email: string;
   info: AdminRangeUsers_adminRangeUsers_info | null;
   loan: AdminRangeUsers_adminRangeUsers_loan | null;
 }

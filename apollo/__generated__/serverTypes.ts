@@ -131,6 +131,16 @@ export interface RangeUsersFilter {
   start: number;
 }
 
+export interface SignInInput {
+  email: string;
+  password: string;
+}
+
+export interface SignUpInput {
+  email: string;
+  password: string;
+}
+
 export interface UpdateBankInput {
   account: string;
   bank: string;

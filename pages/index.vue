@@ -29,10 +29,11 @@
 </template>
 
 <script lang="ts" setup>
-import {FirebaseError} from "@firebase/util"
-import {AuthErrorCodes, signInWithEmailAndPassword} from "@firebase/auth"
 import {FormRules} from "naive-ui/es/form/src/interface"
 import {FormInst} from "naive-ui";
+import {SignIn, SignInVariables} from "~/apollo/mutates/__generated__/SignIn";
+import {SIGN_IN} from "~/apollo/mutates/auth.mutate";
+import {SignInInput} from "~/apollo/__generated__/serverTypes";
 
 definePageMeta({
   layout: 'blank'
@@ -44,9 +45,10 @@ definePageMeta({
 const formRef = ref<FormInst>()
 const message = useMessage()
 
-const from = reactive({
-  email: '123456789',
-  password: '123456789'
+const { mutate: signIn, loading: loadingSignIn } = useMutation<SignIn, SignInVariables>(SIGN_IN)
+const from = reactive<SignInInput>({
+  email: '0396094050',
+  password: 'Khoi025'
 })
 // validate email and password
 const rules = computed<FormRules>(() => ({
@@ -67,32 +69,42 @@ const rules = computed<FormRules>(() => ({
     }
   ]
 }))
+
+const writeToken = async (token: string, notify: string) => {
+  try {
+    await $fetch('/api/auth', {
+      method: 'POST',
+      body: JSON.stringify({
+        token
+      })
+    })
+    // showNotify({
+    //   type: 'success',
+    //   message: notify
+    // })
+
+    setTimeout(() => {
+      window.location.href = '/'
+    }, 500)
+  } catch (e) {
+    //
+  }
+}
 /**
  * Section: Form Handle
  */
-const errorExtracted =  (_e: FirebaseError) => {
-  if (_e.code === AuthErrorCodes.USER_DELETED) {
-    message.error('Tài khoản không tồn tại')
-    //errorMessages.total = 'Tài khoản không tồn tại'
-  } else if (_e.code === AuthErrorCodes.USER_DISABLED) {
-    //errorMessages.total = 'Tài khoản đã bị khóa'
-    message.error('Tài khoản đã bị khóa')
-  } else if (_e.code === AuthErrorCodes.INVALID_PASSWORD) {
-    //errorMessages.total = 'Mật khẩu không đúng'
-    message.error('Mật khẩu không đúng')
-  } else if (_e.code === AuthErrorCodes.INVALID_EMAIL) {
-    //errorMessages.total = 'Email không hợp lệ'
-    message.error('Email không hợp lệ')
-  } else {
-    // errorMessages.total = 'Đăng nhập thất bại'
-    message.error('Đăng nhập thất bại')
-  }
-}
-const register = async () => {
+const authHandle = async () => {
   try {
-    await signInWithEmailAndPassword(faAuth(), from.email + '@gmail.com', from.password)
+    const res = await signIn({
+      input: {
+        email: from.email,
+        password: from.password
+      }
+    })
+    if (res?.data?.signIn) {
+      await writeToken(res?.data?.signIn, 'Đăng Nhập Thành Công')
+    }
   } catch (e) {
-    errorExtracted(e as FirebaseError)
   }
 }
 const onSubmit = async () => {
@@ -100,7 +112,7 @@ const onSubmit = async () => {
     if (errors) {
       return message.error('Vui lòng nhập đầy đủ thông tin')
     }
-    register()
+    authHandle()
   })
 }
 </script>

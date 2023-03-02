@@ -1,33 +1,35 @@
 import { defineEventHandler, readBody, setCookie, createError } from 'h3'
-import {UserMeta} from "~/entities/auth.entity";
 export default defineEventHandler(async (event) => {
-  const body = await readBody(event)
+  const { token }: { token: string } = await readBody(event)
+  if(!token) {
+    return createError({
+      status: 401,
+      message: 'Unauthorized'
+    })
+  }
+
   const runtimeConfig = useRuntimeConfig()
-
   try {
-    const metaData: UserMeta = body.meta
-
-    if(!metaData) {
-      return createError({
-        status: 401,
-        message: 'Unauthorized'
-      })
-    }
-
-    const { token } = await $fetch<{ token: string }>(new URL('/auth', runtimeConfig.public.apiBackend).href, {
-      method: 'POST',
+    // verify token
+    const res = await $fetch<{ _id: string, role: number }>(new URL('/users/me', runtimeConfig.public.apiBackend).href, {
       headers: {
-        Authorization: `Bearer ${metaData.token}`
+        Authorization: `Bearer ${token}`
       }
     })
 
+    if (Number(res.role) === 0) {
+        return createError({
+            status: 401,
+            message: 'Unauthorized'
+        })
+    }
     setCookie(event, '_token', token)
 
     return  {
-      token
+      id: res._id
     }
   } catch (e) {
-   //
+    //
   }
   return createError({
     status: 401,

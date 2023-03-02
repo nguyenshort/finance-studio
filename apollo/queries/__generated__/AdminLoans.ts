@@ -18,7 +18,7 @@ export interface AdminLoans_adminLoans_user_info {
 export interface AdminLoans_adminLoans_user {
   __typename: "User";
   id: string;
-  email: string | null;
+  email: string;
   info: AdminLoans_adminLoans_user_info | null;
 }
 

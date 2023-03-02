@@ -313,7 +313,9 @@ type Mutation {
   createLoan(input: CreateLoanInput!): Loan!
   createWithdraw(input: CreateWithdrawInput!): Logbook!
   removeLanguage(id: Int!): Language!
+  signIn(input: SignInInput!): String!
   signLoan(input: SignLoanInput!): Loan!
+  signUp(input: SignUpInput!): String!
   updateCollaborator(input: UpdateCollaboratorInput!): Collaborator!
   updateIdentity(input: UpdateIdentityInput!): Identity!
   updateLanguage(updateLanguageInput: UpdateLanguageInput!): Language!
@@ -356,8 +358,18 @@ input RangeUsersFilter {
   start: Float!
 }
 
+input SignInInput {
+  email: String!
+  password: String!
+}
+
 input SignLoanInput {
   signature: String!
+}
+
+input SignUpInput {
+  email: String!
+  password: String!
 }
 
 type Subscription {
@@ -432,22 +444,16 @@ input UpdateWithdrawInput {
 }
 
 type User {
-  avatar: String
   balance: Float!
   bank: Bank
   collaborator: Collaborator
   createdAt: Float!
-  email: String
+  email: String!
   id: ID!
   identity: Identity
   info: Info
   loan: Loan
-  name: String!
   role: UserRole!
-  slug: String!
-
-  """Firebase ID"""
-  uid: String!
 }
 
 enum UserRole {

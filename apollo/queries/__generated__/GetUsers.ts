@@ -25,7 +25,7 @@ export interface GetUsers_users_collaborator {
 export interface GetUsers_users {
   __typename: "User";
   id: string;
-  email: string | null;
+  email: string;
   balance: number;
   createdAt: number;
   info: GetUsers_users_info | null;

@@ -23,7 +23,6 @@ export const GET_COLLABORATOR = gql`
             status
             clients {
                 id
-                name
                 email
                 balance
                 loan {

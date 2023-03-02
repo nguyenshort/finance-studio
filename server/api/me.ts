@@ -27,7 +27,6 @@ export default defineEventHandler(async (event) => {
     })
     // @ts-ignore
     if (Number(user?.role) === 0) {
-      // removeAll()
         return createError({
             statusCode: 401,
             message: 'Unauthorized'

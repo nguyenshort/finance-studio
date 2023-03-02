@@ -41,8 +41,7 @@ export interface GetCollaborator_collaborator_clients_info {
 export interface GetCollaborator_collaborator_clients {
   __typename: "User";
   id: string;
-  name: string;
-  email: string | null;
+  email: string;
   balance: number;
   loan: GetCollaborator_collaborator_clients_loan | null;
   info: GetCollaborator_collaborator_clients_info | null;

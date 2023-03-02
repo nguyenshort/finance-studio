@@ -15,7 +15,6 @@
 import {MenuOption} from "naive-ui"
 import {Icon, NuxtLink} from '#components'
 import {NIcon} from 'naive-ui'
-import {signOut} from "firebase/auth"
 
 defineProps<{
   collapsed: boolean
@@ -33,7 +32,6 @@ const authStore = useAuthStore()
 const logOut = async (e: Event) => {
   e.preventDefault()
   await $fetch('/api/logout', {method: 'POST'})
-  await signOut(faAuth())
   window.location.href = '/'
 }
 

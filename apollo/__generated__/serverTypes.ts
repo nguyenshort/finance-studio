@@ -100,12 +100,6 @@ export interface GetUserFilter {
   id: string;
 }
 
-export interface GetUsersFilter {
-  email?: string | null;
-  exclude?: string[] | null;
-  name?: string | null;
-}
-
 export interface RangeUsersFilter {
   end: number;
   start: number;

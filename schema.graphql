@@ -162,12 +162,6 @@ input GetUserFilter {
   id: ID!
 }
 
-input GetUsersFilter {
-  email: String
-  exclude: [ID!] = []
-  name: String
-}
-
 type Identity {
   avatar: String!
   back: String!
@@ -312,7 +306,7 @@ type Query {
   loan: Loan
   logbooks(filter: GetLogbooksFilter!): [Logbook!]!
   me: User!
-  users(filter: GetUsersFilter!): [User!]!
+  users: [User!]!
 }
 
 input RangeUsersFilter {

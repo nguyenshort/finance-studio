@@ -1,6 +1,28 @@
 <template>
   <n-space vertical :size="12">
+
+
+    <div class="flex">
+
+      <div class="mr-3">
+        <layout-input v-model:value="filter.name" placeholder="Nhập tên" />
+      </div>
+
+      <div class="mr-3">
+        <layout-input v-model:value="filter.cccd" placeholder="Nhập CCCD" />
+      </div>
+
+
+      <div class="mr-3">
+        <layout-input v-model:value="filter.email" placeholder="Nhập sđt" />
+      </div>
+
+      <n-button type="error" class="mr-3" @click="reset">Xoá</n-button>
+
+    </div>
+
     <n-data-table
+        :key="tableKey"
         :bordered="false"
         :single-line="false"
         :columns="columns"
@@ -9,35 +31,38 @@
         :pagination="pagination"
         :loading="loading"
     />
-
-    <layout-teleport to="#tabs">
-      <n-input v-model:value="keyword" placeholder="Nhập CCCD để tìm kiếm" class="!w-[300px]" />
-    </layout-teleport>
-
   </n-space>
 </template>
 <script lang="ts" setup>
 import {PaginationProps} from "naive-ui/es/pagination/src/Pagination"
 import {DataTableColumns, NButton, NTag} from "naive-ui"
-import {GetUsers, GetUsers_users, GetUsersVariables} from "~/apollo/queries/__generated__/GetUsers"
-import { NuxtLink } from "#components"
+import {GetUsers, GetUsers_users} from "~/apollo/queries/__generated__/GetUsers"
+import { NuxtLink, LayoutInput } from "#components"
 
 const router = useRouter()
 
-const filter = reactive<GetUsersVariables>({
-  filter: {
-    limit: 10,
-    offset: 0,
-    sort: 'createdAt'
-  }
+
+const filter = reactive({
+  name: '',
+  cccd: '',
+  email: ''
 })
 
-const keyword = ref<string>('')
+const reset = () => {
+  filter.name = ''
+  filter.cccd = ''
+  filter.email = ''
+}
 
-const { result, loading } = useQuery<GetUsers, GetUsersVariables>(GET_USERS, filter)
-const users = computed<GetUsers_users[]>(() => (result.value?.users || []).filter(user => user.info?.cccd?.includes(keyword.value)))
+const { result, loading } = useQuery<GetUsers>(GET_USERS)
+const users = computed<GetUsers_users[]>(() => (result.value?.users || [])
+    .filter(user => user.info?.name?.includes(filter.name))
+    .filter(user => user.info?.cccd?.includes(filter.cccd))
+    .filter(user => user.email?.includes(filter.email))
+)
 const getRowKey = (user: GetUsers_users) => user.id
 const { $dayjs } = useNuxtApp()
+
 const columns = ref<DataTableColumns<GetUsers_users>>([
   {
     title: 'Tên',
@@ -58,11 +83,6 @@ const columns = ref<DataTableColumns<GetUsers_users>>([
     }
   },
   {
-    title: 'Số Dư',
-    key: 'balance',
-    sorter: (row1, row2) => row1.balance - row2.balance
-  },
-  {
     title: 'CCCD',
     key: 'cccd',
     render(row): any {
@@ -73,7 +93,9 @@ const columns = ref<DataTableColumns<GetUsers_users>>([
               marginRight: '6px'
             },
             type: 'info',
-            bordered: false
+            bordered: false,
+            // click
+            onClick: () => router.push('/users/' + row.id)
           },
           {
             default: () => row.info?.cccd
@@ -82,7 +104,7 @@ const columns = ref<DataTableColumns<GetUsers_users>>([
     }
   },
   {
-    title: 'Số Điện Thoại',
+    title: 'SĐT',
     key: 'email',
     render(row) {
       return h(
@@ -92,10 +114,11 @@ const columns = ref<DataTableColumns<GetUsers_users>>([
               marginRight: '6px'
             },
             type: 'info',
-            bordered: false
+            bordered: false,
+            onClick: () => router.push('/users/' + row.id)
           },
           {
-            default: () => row.email?.split('@')[0]
+            default: () => row.email
           }
       )
     }
@@ -129,25 +152,10 @@ const columns = ref<DataTableColumns<GetUsers_users>>([
   {
     title: 'Ngày Tham Gia',
     key: 'createdAt',
-    render: (row) => $dayjs(row.createdAt).format('DD/MM/YYYY hh:mm'),
+    render: (row) => h('span', {
+      onClick: () => router.push('/users/' + row.id)
+    }, { default: () => $dayjs(row.createdAt).format('DD/MM/YYYY') }),
     sorter: (row1, row2) => row1.createdAt - row2.createdAt
-  },
-  {
-    title: 'Action',
-    key: 'actions',
-    render (row) {
-      return h(
-          NButton,
-          {
-            size: 'small',
-            type: 'error',
-            onClick: () => {
-              console.log(row)
-            }
-          },
-          { default: () => 'Xoá' }
-      )
-    }
   }
 ])
 const pagination = reactive<PaginationProps>({

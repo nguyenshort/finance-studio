@@ -1,10 +1,14 @@
 export const GET_USERS = gql`
-    query GetUsers($filter: GetUsersFilter!) {
-        users(filter: $filter) {
+    query GetUsers {
+        users{
             id
             email
             balance
             createdAt
+            bank {
+                id
+                account
+            }
             info {
                 id
                 name

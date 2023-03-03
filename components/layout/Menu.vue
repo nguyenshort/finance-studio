@@ -54,19 +54,6 @@ const menuOptions = computed<MenuOptionWithIcon[]>(() => [
         NuxtLink,
         {
           to: {
-            name: 'loans'
-          }
-        },
-        {default: () => 'Khoản Vay'}
-    ),
-    key: 'loans',
-    icon_name: 'ri:money-pound-circle-line'
-  },
-  {
-    label: () => h(
-        NuxtLink,
-        {
-          to: {
             name: 'collaborators'
           }
         },
@@ -75,20 +62,6 @@ const menuOptions = computed<MenuOptionWithIcon[]>(() => [
     key: 'collaborators',
     icon_name: 'majesticons:support-line'
   },
-  // withdraw
-  // {
-  //   label: () => h(
-  //       NuxtLink,
-  //       {
-  //         to: {
-  //           name: 'withdraw'
-  //         }
-  //       },
-  //       {default: () => 'Rút Tiền'}
-  //   ),
-  //   key: 'withdraw',
-  //   icon_name: 'ri:money-dollar-circle-line'
-  // },
   {
     label: () => h(
         NuxtLink,
@@ -121,14 +94,12 @@ const selectedKey = computed({
   get: () => {
     // match by regex first
     if (/^\/discovery/.test(route.path)) return 'discovery'
-    if (/^\/loans/.test(route.path)) return 'loans'
     if (/^\/collaborators/.test(route.path)) return 'collaborators'
     if (/^\/users/.test(route.path)) return 'users'
     if (/^\/withdraw/.test(route.path)) return 'withdraw'
     return '/'
   },
-  set: (value: string) => {
-  }
+  set: (value: string) => {}
 })
 </script>
 

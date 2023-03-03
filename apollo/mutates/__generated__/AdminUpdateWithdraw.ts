@@ -13,7 +13,6 @@ export interface AdminUpdateWithdraw_adminUpdateWithdraw {
   __typename: "Logbook";
   id: string;
   amount: number;
-  content: string | null;
   /**
    * Nhóm trạng thái
    */

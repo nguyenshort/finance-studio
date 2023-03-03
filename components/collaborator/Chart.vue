@@ -1,25 +1,19 @@
 <template>
-  <div>
-    <bar-chart :chart-data="dataChart" />
-
-    <div class="mt-5">
-      <n-h4>Bảng Số Liệu</n-h4>
-    </div>
-    <discovery-table :users="users" />
-  </div>
+  <bar-chart :chart-data="dataChart" />
 </template>
 
 <script lang="ts" setup>
-import {AdminRangeUsers, AdminRangeUsersVariables} from "~/apollo/queries/__generated__/AdminRangeUsers"
+import { AdminRangeUsersVariables} from "~/apollo/queries/__generated__/AdminRangeUsers"
 
-import { BarChart } from 'vue-chart-3';
-import { Chart, registerables } from "chart.js";
-import {RANGE_USERS} from "~/apollo/queries/user.query";
-import dayjs from "dayjs";
-Chart.register(...registerables);
+import { BarChart } from 'vue-chart-3'
+import { Chart, registerables } from "chart.js"
+import dayjs from "dayjs"
+import {GetCollaborator_collaborator_clients} from "~/apollo/queries/__generated__/GetCollaborator";
+Chart.register(...registerables)
 
 const props = defineProps<{
   range: [number, number]
+  clients: GetCollaborator_collaborator_clients[]
 }>()
 
 const filter = computed<AdminRangeUsersVariables>(() => ({
@@ -29,8 +23,7 @@ const filter = computed<AdminRangeUsersVariables>(() => ({
   }
 }))
 
-const { result } = useQuery<AdminRangeUsers, AdminRangeUsersVariables>(RANGE_USERS, filter, { debounce: 500 })
-const users = computed<AdminRangeUsers['adminRangeUsers']>(() => result.value?.adminRangeUsers || [])
+const users = computed<GetCollaborator_collaborator_clients[]>(() => props.clients)
 
 /**
  * using props.range to define chart data
@@ -60,7 +53,7 @@ const filterChart = () =>  {
 
   const filtterSource = (format: string) => {
     labels.forEach(_step => {
-      const _total = users.value.filter(user => dayjs(user.createdAt).format(format) === _step.toString())
+      const _total = users.value.filter(user => dayjs(user.loan!.createdAt).format(format) === _step.toString())
       const _signed = _total.filter((user) => user.loan?.signature)
       sources.push({
         total: _total.length,

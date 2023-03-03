@@ -38,9 +38,7 @@ export const CREATE_LOGBOOK = gql`
     adminCreateLogbook(input: $input) {
       id
       amount
-      content
       note
-      group
       status
       type
       createdAt
@@ -53,9 +51,7 @@ export const UPDATE_LOGBOOK = gql`
     adminUpdateLogbook(input: $input) {
       id
       amount
-      content
       note
-      group
       status
       type
       createdAt

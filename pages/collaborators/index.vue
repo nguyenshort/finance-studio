@@ -72,8 +72,7 @@ import {FormRules} from "naive-ui/es/form/src/interface";
 import {CreateCollaborator, CreateCollaboratorVariables} from "~/apollo/mutates/__generated__/CreateCollaborator";
 import {
   GetCollaborators,
-  GetCollaborators_collaborators,
-  GetCollaboratorsVariables
+  GetCollaborators_collaborators
 } from "~/apollo/queries/__generated__/GetCollaborators";
 import {GET_COLLABORATORS} from "~/apollo/queries/collaborator.query";
 import {NSpace, NuxtLink} from "#components"
@@ -87,14 +86,7 @@ const message = useMessage()
 /**
  * Section: Query Data
  */
-const filter = reactive<GetCollaboratorsVariables>({
-  filter: {
-    limit: 10,
-    offset: 0,
-    sort: 'createdAt'
-  }
-})
-const {result, loading, refetch} = useQuery<GetCollaborators, GetCollaboratorsVariables>(GET_COLLABORATORS, filter)
+const { result, loading, refetch } = useQuery<GetCollaborators>(GET_COLLABORATORS)
 
 // search
 const keyword = ref('')
@@ -108,9 +100,7 @@ const { $apollo } = useNuxtApp()
  * Section: Toggle Status
  */
 const {
-  mutate: toggleStatus,
-  loading: isToggling,
-  onDone: afterToggling
+  mutate: toggleStatus
 } = useMutation<ToggleCollaborator, ToggleCollaborator>(TOGGLE_COLLABORATOR)
 
 /**
@@ -118,7 +108,6 @@ const {
  */
 const {
   mutate: createCollaborator,
-  loading: creatingCollaborator,
   onDone: afterCreated
 } = useMutation<CreateCollaborator, CreateCollaboratorVariables>(CREATE_COLLABORATOR)
 afterCreated((val) => {
@@ -131,7 +120,6 @@ afterCreated((val) => {
  */
 const {
   mutate: updateCollaborator,
-  loading: updatingCollaborator
 } = useMutation<UpdateCollaborator, UpdateCollaboratorVariables>(UPDATE_COLLABORATOR)
 const statusOptions = computed<SelectMixedOption[]>(() => [
   {

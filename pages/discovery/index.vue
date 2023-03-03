@@ -43,14 +43,6 @@ const tabs = computed<{
     label: 'Đăng Ký Mới',
     value: 'loan'
   },
-  // {
-  //   label: 'Khoản Vay',
-  //   value: 'loan'
-  // },
-  // {
-  //   label: 'Biến Động Số Dư',
-  //   value: 'report'
-  // },
 ])
 
 /**
@@ -60,7 +52,7 @@ const [showFilter, toggleFilter] = useToggle(false)
 
 const initRange = (): [number, number] => {
   const now = Date.now()
-  const start = $dayjs(now).subtract(1, 'day').valueOf()
+  const start = $dayjs(now).subtract(23, 'hour').valueOf()
   return [start, now]
 }
 

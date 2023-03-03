@@ -46,10 +46,6 @@ export interface AdminGetBankFilter {
 }
 
 export interface AdminGetLogbooksFilter {
-  group?: LOGBOOK_GROUP[] | null;
-  limit: number;
-  offset: number;
-  sort: string;
   status?: LOGBOOK_STATUS[] | null;
   type?: LOGBOOK_TYPE[] | null;
   user?: string | null;
@@ -92,25 +88,12 @@ export interface GetCollaboratorFilter {
   id: string;
 }
 
-export interface GetCollaboratorsFilter {
-  limit: number;
-  name?: string | null;
-  offset: number;
-  sort: string;
-}
-
 export interface GetInfoFilter {
   id: string;
 }
 
 export interface GetLoanFilter {
   user: string;
-}
-
-export interface GetLoansFilter {
-  limit: number;
-  offset: number;
-  sort: string;
 }
 
 export interface GetUserFilter {
@@ -120,10 +103,7 @@ export interface GetUserFilter {
 export interface GetUsersFilter {
   email?: string | null;
   exclude?: string[] | null;
-  limit: number;
   name?: string | null;
-  offset: number;
-  sort: string;
 }
 
 export interface RangeUsersFilter {

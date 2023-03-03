@@ -43,12 +43,6 @@ input AdminGetBankFilter {
 }
 
 input AdminGetLogbooksFilter {
-  group: [LOGBOOK_GROUP!] = [LOAN, WITHDRAW]
-  limit: Int!
-  offset: Int!
-
-  """Sắp xếp của bình luận"""
-  sort: String!
   status: [LOGBOOK_STATUS!] = [PENDING, APPROVED, REJECTED]
   type: [LOGBOOK_TYPE!] = [ADD, SUBTRACT]
   user: ID
@@ -151,15 +145,6 @@ input GetCollaboratorFilter {
   id: ID!
 }
 
-input GetCollaboratorsFilter {
-  limit: Int!
-  name: String
-  offset: Int!
-
-  """Sắp xếp của bình luận"""
-  sort: String!
-}
-
 input GetInfoFilter {
   id: ID!
 }
@@ -168,21 +153,7 @@ input GetLoanFilter {
   user: ID!
 }
 
-input GetLoansFilter {
-  limit: Int!
-  offset: Int!
-
-  """Sắp xếp của bình luận"""
-  sort: String!
-}
-
 input GetLogbooksFilter {
-  group: [LOGBOOK_GROUP!] = [LOAN, WITHDRAW]
-  limit: Int!
-  offset: Int!
-
-  """Sắp xếp của bình luận"""
-  sort: String!
   status: [LOGBOOK_STATUS!] = [PENDING, APPROVED, REJECTED]
   type: [LOGBOOK_TYPE!] = [ADD, SUBTRACT]
 }
@@ -194,12 +165,7 @@ input GetUserFilter {
 input GetUsersFilter {
   email: String
   exclude: [ID!] = []
-  limit: Int!
   name: String
-  offset: Int!
-
-  """Sắp xếp của bình luận"""
-  sort: String!
 }
 
 type Identity {
@@ -262,11 +228,7 @@ enum LoanStatus {
 
 type Logbook {
   amount: Float!
-  content: String
   createdAt: Float!
-
-  """Nhóm trạng thái"""
-  group: LOGBOOK_GROUP!
   id: ID!
   note: String
 
@@ -337,13 +299,13 @@ type Query {
   adminIdentity(filter: AdminGetBankFilter!): Identity
   adminInfo(filter: GetInfoFilter!): Info
   adminLoan(filter: GetLoanFilter!): Loan
-  adminLoans(filter: GetLoansFilter!): [Loan!]!
+  adminLoans: [Loan!]!
   adminLogbooks(filter: AdminGetLogbooksFilter!): [Logbook!]!
   adminRangeUsers(filter: RangeUsersFilter!): [User!]!
   adminUser(filter: GetUserFilter!): User!
   bank: Bank
   collaborator(filter: GetCollaboratorFilter!): Collaborator!
-  collaborators(filter: GetCollaboratorsFilter!): [Collaborator!]!
+  collaborators: [Collaborator!]!
   identity: Identity
   info: Info
   language(id: Int!): Language!

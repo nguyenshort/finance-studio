@@ -31,8 +31,8 @@ export const GET_LOAN_STATUS = gql`
 `
 
 export const GET_COLLABORATORS_FOR_LOAN = gql`
-    query FormCollaborators($filter: GetCollaboratorsFilter!) {
-        collaborators(filter: $filter) {
+    query FormCollaborators {
+        collaborators {
             id
             name
             fanpage
@@ -42,8 +42,8 @@ export const GET_COLLABORATORS_FOR_LOAN = gql`
 `
 
 export const GET_LOANS = gql`
-    query AdminLoans($filter: GetLoansFilter!) {
-        adminLoans(filter: $filter) {
+    query AdminLoans {
+        adminLoans {
             id
             months
             user {
@@ -70,8 +70,6 @@ export const GET_LOGBOOKS = gql`
             id
             createdAt
             amount
-            content
-            group
             status
             note
             type
@@ -101,9 +99,7 @@ export const ADMIN_LOGBOOKS = gql`
         adminLogbooks(filter: $filter) {
             id
             amount
-            content
             note
-            group
             status
             type
             createdAt

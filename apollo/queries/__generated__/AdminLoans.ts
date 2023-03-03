@@ -3,7 +3,7 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { GetLoansFilter, LoanStatus } from "./../../__generated__/serverTypes";
+import { LoanStatus } from "./../../__generated__/serverTypes";
 
 // ====================================================
 // GraphQL query operation: AdminLoans
@@ -52,8 +52,4 @@ export interface AdminLoans_adminLoans {
 
 export interface AdminLoans {
   adminLoans: AdminLoans_adminLoans[];
-}
-
-export interface AdminLoansVariables {
-  filter: GetLoansFilter;
 }

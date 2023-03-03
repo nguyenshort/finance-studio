@@ -3,7 +3,7 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { GetCollaboratorsFilter, COLLABORATOR_STATUS } from "./../../__generated__/serverTypes";
+import { COLLABORATOR_STATUS } from "./../../__generated__/serverTypes";
 
 // ====================================================
 // GraphQL query operation: FormCollaborators
@@ -19,8 +19,4 @@ export interface FormCollaborators_collaborators {
 
 export interface FormCollaborators {
   collaborators: FormCollaborators_collaborators[];
-}
-
-export interface FormCollaboratorsVariables {
-  filter: GetCollaboratorsFilter;
 }

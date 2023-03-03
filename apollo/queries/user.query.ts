@@ -39,6 +39,16 @@ export const GET_USER_BALANCE = gql`
     }
 `
 
+export const GET_USER_WITHDRAW_STATUS = gql`
+    query AdminUserWithdrawStatus($filter: GetUserFilter!) {
+        adminUser(filter: $filter) {
+            id
+            withdrawable
+            withdrawNote
+        }
+    }
+`
+
 export const RANGE_USERS = gql`
     query AdminRangeUsers($filter: RangeUsersFilter!) {
         adminRangeUsers(filter: $filter) {

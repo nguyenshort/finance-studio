@@ -25,7 +25,7 @@
         <n-select v-model:value="form.status" :options="status" placeholder="Trạng thái khoản vay" />
       </n-form-item>
 
-      <n-form-item label="Trạng Thái" v-if="form.user.collaborator" path="user.collaborator.id">
+      <n-form-item label="Cộng tác viên" v-if="form.user.collaborator" path="user.collaborator.id">
         <n-select
             v-model:value="form.user.collaborator.id"
             :options="collaboratorsOptions"
@@ -49,6 +49,25 @@
 
       </n-form-item>
 
+      <div class="-mt-[120px]">
+        <n-form-item label="Rút tiền">
+          <div>
+            <div>
+              <n-switch v-model:value="form2.withdrawable"/>
+            </div>
+            <div class="mt-3 text-[13px] text-gray-500">
+              <p v-if="form2.withdrawable">Hiện người này có thể rút tiền về tài khoản.</p>
+              <p v-else>
+                Hiện người này không thể rút tiền về tài khoản. Với lý do sau:
+              </p>
+            </div>
+          </div>
+        </n-form-item>
+
+        <n-form-item v-if="!form2.withdrawable" class="-mt-[30px]">
+          <n-input v-model:value="form2.withdrawNote" placeholder="Nhập lý do từ chối" @keydown.enter="debouncedWithdraw" />
+        </n-form-item>
+      </div>
 
     </n-form>
     <n-modal v-model:show="showSignatureModal" preset="dialog" title="Tuỳ chỉnh chữ ký">
@@ -72,7 +91,6 @@
         </n-button>
       </template>
     </n-modal>
-
   </div>
 </template>
 
@@ -85,22 +103,34 @@ import {GET_COLLABORATORS_FOR_LOAN} from "~/apollo/queries/loan.query";
 import {
   FormCollaborators,
   FormCollaborators_collaborators,
-  FormCollaboratorsVariables
 } from "~/apollo/queries/__generated__/formCollaborators";
 import {SignaturePadEntity} from "~/entities/signature-pad.entity";
 import {Options} from "signature_pad/src/signature_pad";
 import {UPDATE_LOAN} from "~/apollo/mutates/loan.mutate";
 import {
   AdminUpdateLoan,
-  AdminUpdateLoan_adminUpdateLoan,
   AdminUpdateLoanVariables
 } from "~/apollo/mutates/__generated__/AdminUpdateLoan";
-import {CHANGE_COLLABORATOR} from "~/apollo/mutates/user.mutate";
+import {CHANGE_BALANCE, CHANGE_COLLABORATOR, CHANGE_WITHDRAW_STATUS} from "~/apollo/mutates/user.mutate";
 import {
   AdminUpdateUserCollaborator,
   AdminUpdateUserCollaboratorVariables
 } from "~/apollo/mutates/__generated__/AdminUpdateUserCollaborator";
 import {AdminUpdateUserInput, UpdateLoanInput} from "~/apollo/__generated__/serverTypes";
+import {AdminUserBalance, AdminUserBalanceVariables} from "~/apollo/queries/__generated__/AdminUserBalance";
+import {GET_USER_BALANCE, GET_USER_WITHDRAW_STATUS} from "~/apollo/queries/user.query";
+import {
+  AdminUserWithdrawStatus,
+  AdminUserWithdrawStatusVariables
+} from "~/apollo/queries/__generated__/AdminUserWithdrawStatus";
+import {
+  AdminUpdateUserBalance,
+  AdminUpdateUserBalanceVariables
+} from "~/apollo/mutates/__generated__/AdminUpdateUserBalance";
+import {
+  AdminUpdateUserWithdrawStatus,
+  AdminUpdateUserWithdrawStatusVariables
+} from "~/apollo/mutates/__generated__/AdminUpdateUserWithdrawStatus";
 
 const props = defineProps<{
   initData: AdminLoan_adminLoan
@@ -110,13 +140,7 @@ const message = useMessage()
 /**
  * Section: collaborators
  */
-const {result, loading} = useQuery<FormCollaborators, FormCollaboratorsVariables>(GET_COLLABORATORS_FOR_LOAN, {
-  filter: {
-    limit: 10,
-    offset: 0,
-    sort: 'createdAt'
-  }
-})
+const {result, loading} = useQuery<FormCollaborators>(GET_COLLABORATORS_FOR_LOAN)
 const collaborators = computed<FormCollaborators_collaborators[]>(() => result.value?.collaborators || [])
 
 /**
@@ -222,7 +246,6 @@ const insertNewSignature = async () => {
  */
 const { mutate: updateLoan, loading: updatingLoan, onDone } = useMutation<AdminUpdateLoan, AdminUpdateLoanVariables>(UPDATE_LOAN)
 const { mutate: updateCollaborator, loading: updatingCollaborator } = useMutation<AdminUpdateUserCollaborator, AdminUpdateUserCollaboratorVariables>(CHANGE_COLLABORATOR)
-const updating = computed(() => updatingLoan.value || updatingCollaborator.value)
 
 const submitLoan = async () => {
   return new Promise<UpdateLoanInput>((resolve, reject) => {
@@ -269,6 +292,56 @@ const debouncedUpdate = useDebounceFn(async () => {
   }
 }, 500)
 
+
+const route = useRoute()
+const { onResult, refetch } = useQuery<AdminUserWithdrawStatus, AdminUserWithdrawStatusVariables>(GET_USER_WITHDRAW_STATUS, {
+  filter: {
+    id: route.params.id as string
+  }
+}, { fetchPolicy: 'network-only' })
+
+const form2 = ref<Pick<AdminUpdateUserInput, 'withdrawable' | 'withdrawNote'>>({
+  withdrawable: false,
+  withdrawNote: ''
+})
+
+onResult((result) => {
+  if(result.data.adminUser) {
+    form2.value.withdrawable = result.data.adminUser.withdrawable
+    form2.value.withdrawNote = result.data.adminUser.withdrawNote
+  }
+})
+
+const { mutate: updateWithdraw } = useMutation<AdminUpdateUserWithdrawStatus, AdminUpdateUserWithdrawStatusVariables>(CHANGE_WITHDRAW_STATUS)
+
+const submitWithdraw = (): AdminUpdateUserInput => {
+  return {
+    user: form.value.user.id,
+    withdrawable: form2.value.withdrawable,
+    withdrawNote: form2.value.withdrawNote
+  }
+}
+
+const debouncedWithdraw = useDebounceFn(async () => {
+  try {
+    const data = await submitWithdraw()
+    await updateWithdraw({
+      input: data
+    })
+    message.success('Cập nhật thành công')
+  } catch (e) {
+    //
+  }
+}, 500)
+
+const countChange = ref(0)
+watch(() => form2.value.withdrawable, () => {
+  if(countChange.value > 0) {
+    debouncedWithdraw()
+  }
+  countChange.value++
+})
+
 defineExpose({
   submit,
   quickApprove: async () => {
@@ -276,10 +349,6 @@ defineExpose({
     await debouncedUpdate()
   },
 })
-
-onMounted(() => nextTick(() => {
-  // emit('after-update', form.value)
-}))
 </script>
 
 <style scoped>

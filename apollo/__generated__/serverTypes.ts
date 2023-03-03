@@ -13,11 +13,6 @@ export enum COLLABORATOR_STATUS {
   INACTIVE = "INACTIVE",
 }
 
-export enum LOGBOOK_GROUP {
-  LOAN = "LOAN",
-  WITHDRAW = "WITHDRAW",
-}
-
 export enum LOGBOOK_STATUS {
   APPROVED = "APPROVED",
   PENDING = "PENDING",
@@ -58,6 +53,8 @@ export interface AdminUpdateUserInput {
   name?: string | null;
   role?: UserRole | null;
   user: string;
+  withdrawNote?: string | null;
+  withdrawable?: boolean | null;
 }
 
 export interface CreateCollaboratorInput {
@@ -67,12 +64,7 @@ export interface CreateCollaboratorInput {
 
 export interface CreateLogbookInput {
   amount: number;
-  content?: string | null;
-  effective: boolean;
-  group: LOGBOOK_GROUP;
   note?: string | null;
-  status: LOGBOOK_STATUS;
-  type: LOGBOOK_TYPE;
   user: string;
 }
 
@@ -153,12 +145,9 @@ export interface UpdateLoanInput {
 
 export interface UpdateLogbookInput {
   amount?: number | null;
-  content?: string | null;
-  group?: LOGBOOK_GROUP | null;
   id: string;
   note?: string | null;
-  status?: LOGBOOK_STATUS | null;
-  type?: LOGBOOK_TYPE | null;
+  user?: string | null;
 }
 
 export interface UpdateWithdrawInput {

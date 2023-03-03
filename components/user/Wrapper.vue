@@ -8,9 +8,20 @@
         <user-bank-form v-if="bank" :init-data="bank" class="w-1/3 px-4" ref="formBankRef" />
       </div>
 
-      <n-divider title-placement="left">Biến Động Số Dư</n-divider>
+      <div class="flex">
 
-      <user-logbook-table ref="tableRef" />
+        <div class="w-1/2 pr-2">
+          <n-divider title-placement="left">Biến Động Số Dư</n-divider>
+
+          <user-logbook-table ref="tableRef" />
+        </div>
+
+        <div class="w-1/2 pl-2">
+          <n-divider title-placement="left">Biến Động Số Dư</n-divider>
+
+          <user-logbook-table ref="tableRef" />
+        </div>
+      </div>
 
     </n-spin>
 

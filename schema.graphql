@@ -55,6 +55,8 @@ input AdminUpdateUserInput {
   name: String
   role: UserRole
   user: ID!
+  withdrawNote: String
+  withdrawable: Boolean
 }
 
 type Bank {
@@ -119,18 +121,8 @@ input CreateLoanInput {
 
 input CreateLogbookInput {
   amount: Float!
-  content: String = ""
-  effective: Boolean!
-  group: LOGBOOK_GROUP!
   note: String = ""
-  status: LOGBOOK_STATUS!
-  type: LOGBOOK_TYPE!
   user: ID!
-}
-
-input CreateWithdrawInput {
-  """Example field (placeholder)"""
-  amount: Float!
 }
 
 input DeleteLogbookInput {
@@ -225,19 +217,8 @@ type Logbook {
   createdAt: Float!
   id: ID!
   note: String
-
-  """Nhóm trạng thái"""
-  status: LOGBOOK_STATUS!
-
-  """Nhóm cong tru"""
-  type: LOGBOOK_TYPE!
   updatedAt: Float!
   user: User!
-}
-
-enum LOGBOOK_GROUP {
-  LOAN
-  WITHDRAW
 }
 
 enum LOGBOOK_STATUS {
@@ -267,7 +248,6 @@ type Mutation {
   createInfo(input: CreateInfoInput!): Info!
   createLanguage(createLanguageInput: CreateLanguageInput!): Language!
   createLoan(input: CreateLoanInput!): Loan!
-  createWithdraw(input: CreateWithdrawInput!): Logbook!
   removeLanguage(id: Int!): Language!
   signIn(input: SignInInput!): String!
   signLoan(input: SignLoanInput!): Loan!
@@ -383,12 +363,9 @@ input UpdateLoanInput {
 
 input UpdateLogbookInput {
   amount: Float
-  content: String = ""
-  group: LOGBOOK_GROUP
   id: ID!
   note: String = ""
-  status: LOGBOOK_STATUS
-  type: LOGBOOK_TYPE
+  user: ID
 }
 
 input UpdateWithdrawInput {
@@ -410,6 +387,8 @@ type User {
   info: Info
   loan: Loan
   role: UserRole!
+  withdrawNote: String
+  withdrawable: Boolean!
 }
 
 enum UserRole {

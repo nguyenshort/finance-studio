@@ -18,7 +18,6 @@ export const UPDATE_WITHDRAW = gql`
     adminUpdateWithdraw(input: $input) {
       id
       amount
-      status
       note
     }
   }

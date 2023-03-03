@@ -70,9 +70,7 @@ export const GET_LOGBOOKS = gql`
             id
             createdAt
             amount
-            status
             note
-            type
             user {
                 id
                 info {
@@ -100,8 +98,6 @@ export const ADMIN_LOGBOOKS = gql`
             id
             amount
             note
-            status
-            type
             createdAt
         }
     }

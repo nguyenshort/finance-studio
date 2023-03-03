@@ -3,7 +3,7 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { AdminGetLogbooksFilter, LOGBOOK_STATUS, LOGBOOK_TYPE } from "./../../__generated__/serverTypes";
+import { AdminGetLogbooksFilter } from "./../../__generated__/serverTypes";
 
 // ====================================================
 // GraphQL query operation: AdminLogbooks
@@ -42,15 +42,7 @@ export interface AdminLogbooks_adminLogbooks {
   id: string;
   createdAt: number;
   amount: number;
-  /**
-   * Nhóm trạng thái
-   */
-  status: LOGBOOK_STATUS;
   note: string | null;
-  /**
-   * Nhóm cong tru
-   */
-  type: LOGBOOK_TYPE;
   user: AdminLogbooks_adminLogbooks_user;
 }
 

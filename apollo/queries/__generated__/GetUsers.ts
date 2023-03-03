@@ -7,6 +7,12 @@
 // GraphQL query operation: GetUsers
 // ====================================================
 
+export interface GetUsers_users_bank {
+  __typename: "Bank";
+  id: string;
+  account: string;
+}
+
 export interface GetUsers_users_info {
   __typename: "Info";
   id: string;
@@ -26,6 +32,7 @@ export interface GetUsers_users {
   email: string;
   balance: number;
   createdAt: number;
+  bank: GetUsers_users_bank | null;
   info: GetUsers_users_info | null;
   collaborator: GetUsers_users_collaborator | null;
 }

@@ -3,7 +3,7 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { CreateLogbookInput, LOGBOOK_STATUS, LOGBOOK_TYPE } from "./../../__generated__/serverTypes";
+import { CreateLogbookInput } from "./../../__generated__/serverTypes";
 
 // ====================================================
 // GraphQL mutation operation: AdminCreateLogbook
@@ -14,14 +14,6 @@ export interface AdminCreateLogbook_adminCreateLogbook {
   id: string;
   amount: number;
   note: string | null;
-  /**
-   * Nhóm trạng thái
-   */
-  status: LOGBOOK_STATUS;
-  /**
-   * Nhóm cong tru
-   */
-  type: LOGBOOK_TYPE;
   createdAt: number;
 }
 

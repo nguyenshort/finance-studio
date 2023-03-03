@@ -39,8 +39,6 @@ export const CREATE_LOGBOOK = gql`
       id
       amount
       note
-      status
-      type
       createdAt
     }
   }
@@ -52,8 +50,6 @@ export const UPDATE_LOGBOOK = gql`
       id
       amount
       note
-      status
-      type
       createdAt
     }
   }
@@ -64,6 +60,16 @@ export const CHANGE_BALANCE = gql`
     adminUpdateUser(input: $input) {
       id
       balance
+    }
+  }
+`
+
+export const CHANGE_WITHDRAW_STATUS = gql`
+  mutation AdminUpdateUserWithdrawStatus($input: AdminUpdateUserInput!) {
+    adminUpdateUser(input: $input) {
+      id
+      withdrawable
+      withdrawNote
     }
   }
 `

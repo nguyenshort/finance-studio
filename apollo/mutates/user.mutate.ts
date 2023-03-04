@@ -118,3 +118,12 @@ export const UPDATE_EXTRA = gql`
     }
   }
 `
+
+export const TOGGLE_WITHDRAW = gql`
+  mutation ToggleWithdraw($filter: ToggleWithdrawInput!) {
+    toggleWithdraw(filter: $filter) {
+      id
+      status
+    }
+  }
+`

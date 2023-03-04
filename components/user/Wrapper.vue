@@ -17,9 +17,9 @@
         </div>
 
         <div class="w-1/2 pl-2">
-          <n-divider title-placement="left">Biến Động Số Dư</n-divider>
+          <n-divider title-placement="left">Yêu Cầu Rút Tiền</n-divider>
 
-          <user-logbook-table ref="tableRef" />
+          <user-withdraw-table ref="table2Ref" />
         </div>
       </div>
 
@@ -44,14 +44,13 @@
        <div class="w-3"></div>
 
        <n-button type="success" @click="notifyBus.emit('add')" :disabled="loading">
-         Thêm Tiền
+         Thêm Giao Dịch
        </n-button>
+<!--       <div class="w-3"></div>-->
 
-       <div class="w-3"></div>
-
-       <n-button type="success" @click="notifyBus.emit('subtract')" :disabled="loading">
-         Trừ Tiền
-       </n-button>
+<!--       <n-button type="success" @click="notifyBus.emit('subtract')" :disabled="loading">-->
+<!--         Trừ Tiền-->
+<!--       </n-button>-->
 
        <div class="w-3"></div>
 
@@ -142,7 +141,7 @@ const submit = async () => {
       input1: loan[0],
       input2: {
         ...loan[1],
-        ...bank[1]
+        /// ...bank[1]
       },
       input3: bank[0],
     })

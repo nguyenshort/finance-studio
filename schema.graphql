@@ -125,6 +125,10 @@ input CreateLogbookInput {
   user: ID!
 }
 
+input CreateWithdrawInput {
+  amount: Float
+}
+
 input DeleteLogbookInput {
   id: ID!
 }
@@ -152,6 +156,10 @@ input GetLogbooksFilter {
 
 input GetUserFilter {
   id: ID!
+}
+
+input GetWithdrawsFilter {
+  user: ID!
 }
 
 type Identity {
@@ -240,18 +248,17 @@ type Mutation {
   adminUpdateLoan(input: UpdateLoanInput!): Loan!
   adminUpdateLogbook(input: UpdateLogbookInput!): Logbook!
   adminUpdateUser(input: AdminUpdateUserInput!): User!
-
-  """Cannot effect to user balance"""
-  adminUpdateWithdraw(input: UpdateWithdrawInput!): Logbook!
   createBank(input: CreateBankInput!): Bank!
   createCollaborator(input: CreateCollaboratorInput!): Collaborator!
   createInfo(input: CreateInfoInput!): Info!
   createLanguage(createLanguageInput: CreateLanguageInput!): Language!
   createLoan(input: CreateLoanInput!): Loan!
+  createWithdraw(input: CreateWithdrawInput!): Withdraw!
   removeLanguage(id: Int!): Language!
   signIn(input: SignInInput!): String!
   signLoan(input: SignLoanInput!): Loan!
   signUp(input: SignUpInput!): String!
+  toggleWithdraw(filter: ToggleWithdrawInput!): Withdraw!
   updateCollaborator(input: UpdateCollaboratorInput!): Collaborator!
   updateIdentity(input: UpdateIdentityInput!): Identity!
   updateLanguage(updateLanguageInput: UpdateLanguageInput!): Language!
@@ -287,6 +294,8 @@ type Query {
   logbooks(filter: GetLogbooksFilter!): [Logbook!]!
   me: User!
   users: [User!]!
+  withdraws: [Withdraw!]!
+  withdrawsAdmin(filter: GetWithdrawsFilter!): [Withdraw!]!
 }
 
 input RangeUsersFilter {
@@ -311,6 +320,10 @@ input SignUpInput {
 type Subscription {
   """Nhận thông báo"""
   subNotify: Notify!
+}
+
+input ToggleWithdrawInput {
+  id: ID!
 }
 
 input UpdateBankInput {
@@ -368,14 +381,6 @@ input UpdateLogbookInput {
   user: ID
 }
 
-input UpdateWithdrawInput {
-  amount: Float
-  content: String
-  id: ID!
-  note: String
-  status: LOGBOOK_STATUS
-}
-
 type User {
   balance: Float!
   bank: Bank
@@ -395,4 +400,19 @@ enum UserRole {
   ADMIN
   SP_ADMIN
   USER
+}
+
+type Withdraw {
+  amount: Float!
+  createdAt: Float!
+  id: ID!
+  status: WithDrawStatus!
+  updatedAt: Float!
+  user: User!
+}
+
+enum WithDrawStatus {
+  APPROVED
+  PENDING
+  REJECTED
 }

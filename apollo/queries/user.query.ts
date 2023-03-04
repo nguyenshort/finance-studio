@@ -75,3 +75,14 @@ export const RANGE_USERS = gql`
         }
     }
 `
+
+export const GET_USER_WITHDRAW = gql`
+    query WithdrawsAdmin($filter: GetWithdrawsFilter!) {
+        withdrawsAdmin(filter: $filter) {
+            id
+            amount
+            createdAt
+            status
+        }
+    }
+`

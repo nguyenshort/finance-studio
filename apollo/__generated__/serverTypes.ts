@@ -36,6 +36,12 @@ export enum UserRole {
   USER = "USER",
 }
 
+export enum WithDrawStatus {
+  APPROVED = "APPROVED",
+  PENDING = "PENDING",
+  REJECTED = "REJECTED",
+}
+
 export interface AdminGetBankFilter {
   user: string;
 }
@@ -92,6 +98,10 @@ export interface GetUserFilter {
   id: string;
 }
 
+export interface GetWithdrawsFilter {
+  user: string;
+}
+
 export interface RangeUsersFilter {
   end: number;
   start: number;
@@ -105,6 +115,10 @@ export interface SignInInput {
 export interface SignUpInput {
   email: string;
   password: string;
+}
+
+export interface ToggleWithdrawInput {
+  id: string;
 }
 
 export interface UpdateBankInput {
@@ -148,14 +162,6 @@ export interface UpdateLogbookInput {
   id: string;
   note?: string | null;
   user?: string | null;
-}
-
-export interface UpdateWithdrawInput {
-  amount?: number | null;
-  content?: string | null;
-  id: string;
-  note?: string | null;
-  status?: LOGBOOK_STATUS | null;
 }
 
 //==============================================================

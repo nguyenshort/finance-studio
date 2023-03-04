@@ -12,13 +12,3 @@ export const UPDATE_LOAN = gql`
     }
   }
 `
-
-export const UPDATE_WITHDRAW = gql`
-  mutation AdminUpdateWithdraw($input: UpdateWithdrawInput!) {
-    adminUpdateWithdraw(input: $input) {
-      id
-      amount
-      note
-    }
-  }
-`

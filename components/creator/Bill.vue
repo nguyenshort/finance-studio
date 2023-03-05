@@ -7,7 +7,7 @@
 
     <div
         class="absolute"
-        v-for="(item, key) in els"
+        v-for="(item, key) in config"
         :key="key"
         :style="item.style"
     >
@@ -26,11 +26,11 @@ const props = defineProps<{
   config: BankConfig
 }>()
 
-const els = ref(props.config)
-
-watch(() => props.config, (val) => {
-  els.value = val
-}, { deep: true })
+// const els = ref(props.config)
+//
+// watch(() => props.config, (val) => {
+//   els.value = val
+// }, { deep: true })
 </script>
 
 <style scoped></style>

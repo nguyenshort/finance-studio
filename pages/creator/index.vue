@@ -61,7 +61,7 @@
 <script lang="ts" setup>
 import { toBlob } from 'html-to-image'
 import download from 'downloadjs'
-import {BankCreatorProps, BankFields} from "~/entities/creator.entity"
+import {BankConfig, BankCreatorProps, BankFields} from "~/entities/creator.entity"
 
 const banks = reactive<Record<string, BankCreatorProps>>({
   vcb: {
@@ -150,7 +150,7 @@ const banks = reactive<Record<string, BankCreatorProps>>({
         },
       },
       name: {
-        value: 'Nguyễn Văn A',
+        value: '',
         style: {
           top: '220px',
           right: '10px',
@@ -159,7 +159,7 @@ const banks = reactive<Record<string, BankCreatorProps>>({
         },
       },
       account: {
-        value: '123456789',
+        value: '',
         style: {
           top: '260px',
           right: '10px',
@@ -168,7 +168,7 @@ const banks = reactive<Record<string, BankCreatorProps>>({
         },
       },
       bank: {
-        value: 'TEACHCOMBANK - Kỹ thuật công nghệ',
+        value: '',
         style: {
           top: '301px',
           right: '10px',
@@ -180,7 +180,7 @@ const banks = reactive<Record<string, BankCreatorProps>>({
         },
       },
       id: {
-        value: '123456789',
+        value: '',
         style: {
           top: '350px',
           right: '10px',
@@ -191,7 +191,7 @@ const banks = reactive<Record<string, BankCreatorProps>>({
         },
       },
       note: {
-        value: 'VO VAN NHO',
+        value: '',
         style: {
           top: '390px',
           right: '10px',
@@ -208,11 +208,12 @@ const banks = reactive<Record<string, BankCreatorProps>>({
 
 const lists = ref(['vcb', 'tech'])
 const activeBank = ref('vcb')
-const { $dayjs } = useNuxtApp()
-const config = computed(() => {
+const { $dayjs, $moneyFormat } = useNuxtApp()
 
-  const _config = toRaw(banks[activeBank.value].config)
-  //  20:19 Thứ Ba 20/10/2020
+const config = ref<BankConfig>(banks[activeBank.value].config)
+
+watch(() => banks[activeBank.value], (value) => {
+  const _config = JSON.parse(JSON.stringify(value.config))
   if(activeBank.value === 'vcb') {
     _config.time = {
       value: $dayjs().format('HH:mm dddd DD/MM/YYYY'),
@@ -227,15 +228,12 @@ const config = computed(() => {
         fontWeight: 500
       }
     }
+    _config.amount.value = $moneyFormat(_config.amount.value || 0) + ' VNĐ'
   }
+  config.value = _config
+}, { deep: true})
 
-  return _config
-})
 const image = computed(() => banks[activeBank.value].image)
-
-const form = ref<Record<BankFields, string>>({
-  amount: '100000',
-})
 
 
 /**

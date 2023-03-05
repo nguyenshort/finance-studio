@@ -3,5 +3,5 @@ export const $moneyFormat = (money: number) => {
     style: 'currency',
     currency: 'VND'
   })
-  return fotmatter.format(money).replace('₫', '').trim()
+  return fotmatter.format(money).replace('₫', '').replaceAll('.', ',').trim()
 }

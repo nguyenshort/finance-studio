@@ -43,7 +43,17 @@
         </n-form-item>
       </n-form>
 
-      <button @click="exportImage">Xuất file</button>
+      <div class="flex">
+        <n-button type="info" @click="copyImage">
+          Sao Chép
+        </n-button>
+
+        <div class="w-3"></div>
+
+        <n-button type="info" @click="exportImage">
+          Tải Xuống
+        </n-button>
+      </div>
     </div>
     <div class="w-[280px]">
       <creator-bill
@@ -241,6 +251,22 @@ const image = computed(() => banks[activeBank.value].image)
  */
 const billRef = ref()
 const { width, height } = useElementSize(billRef)
+
+const copyImage = async () => {
+  if(!billRef.value) {
+    return
+  }
+
+  const _file = await toBlob(billRef.value.$el, {
+    canvasWidth: 600,
+    canvasHeight: 600 * (height.value / width.value),
+  })
+  await navigator.clipboard.write([
+    new ClipboardItem({
+      'image/png': _file!
+    })
+  ]);
+}
 const exportImage = async () => {
   if(!billRef.value) {
     return

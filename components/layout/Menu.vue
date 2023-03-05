@@ -77,6 +77,19 @@ const menuOptions = computed<MenuOptionWithIcon[]>(() => [
   },
   {
     label: () => h(
+        NuxtLink,
+        {
+          to: {
+            name: 'creator'
+          }
+        },
+        {default: () => 'Hoá Đơn'}
+    ),
+    key: 'creator',
+    icon_name: 'ri:user-4-line'
+  },
+  {
+    label: () => h(
         'a',
         {
           href: '#',

@@ -156,6 +156,16 @@ const columns = ref<DataTableColumns<GetUsers_users>>([
       onClick: () => router.push('/users/' + row.id)
     }, { default: () => $dayjs(row.createdAt).format('DD/MM/YYYY') }),
     sorter: (row1, row2) => row1.createdAt - row2.createdAt
+  },
+  {
+    title: 'Hành Động',
+    key: 'action',
+    render: (row) => h(NButton, {
+      type: 'info',
+      onClick: () => {
+
+      }
+    }, { default: () => 'Đổi Mật Khẩu' })
   }
 ])
 const pagination = reactive<PaginationProps>({

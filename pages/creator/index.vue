@@ -206,7 +206,7 @@ const banks = reactive<Record<string, BankCreatorProps>>({
   }
 })
 
-const lists = ref(['vcb', 'tech'])
+const lists = ref(['vcb'])
 const activeBank = ref('vcb')
 const { $dayjs, $moneyFormat } = useNuxtApp()
 

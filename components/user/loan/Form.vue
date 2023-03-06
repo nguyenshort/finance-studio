@@ -301,7 +301,7 @@ const { onResult, refetch } = useQuery<AdminUserWithdrawStatus, AdminUserWithdra
 }, { fetchPolicy: 'network-only' })
 
 const form2 = ref<Pick<AdminUpdateUserInput, 'withdrawable' | 'withdrawNote'>>({
-  withdrawable: false,
+  withdrawable: undefined,
   withdrawNote: ''
 })
 

@@ -197,7 +197,7 @@ const banks = reactive<Record<string, BankCreatorProps>>({
         },
       },
       name: {
-        value: 'Vo Van Nho',
+        value: '',
         style: {
           top: '195px',
           left: '16px',
@@ -220,7 +220,7 @@ const banks = reactive<Record<string, BankCreatorProps>>({
         },
       },
       bank: {
-        value: 'Ngân hàng TMCP Ngoại Thương Việt Nam',
+        value: '',
         style: {
           top: '298px',
           left: '16px',
@@ -233,7 +233,7 @@ const banks = reactive<Record<string, BankCreatorProps>>({
         },
       },
       id: {
-        value: 'FT23065005000338',
+        value: '',
         style: {
           top: '444px',
           left: '16px',
@@ -246,7 +246,7 @@ const banks = reactive<Record<string, BankCreatorProps>>({
         },
       },
       note: {
-        value: 'Ly chuyen',
+        value: '',
         style: {
           top: '355px',
           left: '16px',
@@ -322,7 +322,7 @@ const config = computed(() => {
   return _config
 })
 
-const [isSuccess, toggleSuccess] = useToggle(false)
+const [isSuccess, toggleSuccess] = useToggle(true)
 const image = computed(() => banks[activeBank.value].image[isSuccess.value ? 0 : 1])
 
 

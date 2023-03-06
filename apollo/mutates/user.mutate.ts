@@ -135,3 +135,11 @@ export const REMOVE_USER = gql`
     }
   }
 `
+
+export const UPDATE_PASSWORD = gql`
+    mutation AdminUpdatePassword($input: UpdatePasswordUserInput!) {
+        adminUpdatePassword(input: $input) {
+            id
+        }
+    }
+`

@@ -168,6 +168,11 @@ export interface UpdateLogbookInput {
   user?: string | null;
 }
 
+export interface UpdatePasswordUserInput {
+  password: string;
+  user: string;
+}
+
 //==============================================================
 // END Enums and Input Objects
 //==============================================================

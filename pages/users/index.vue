@@ -22,7 +22,6 @@
     </div>
 
     <n-data-table
-        :key="tableKey"
         :bordered="false"
         :single-line="false"
         :columns="columns"
@@ -31,6 +30,26 @@
         :pagination="pagination"
         :loading="loading"
     />
+
+    <n-modal v-model:show="showUpdatePass" preset="dialog" title="Đổi mật khẩu">
+
+      <n-form
+          ref="formRef"
+          :label-width="80"
+      >
+        <n-form-item label="Nhập mật khẩu" path="amount">
+          <n-input v-model:value="inputPass.input.password" placeholder="Nhập mật khẩu mới" class="w-full" :step="1" />
+        </n-form-item>
+      </n-form>
+
+
+      <template #action>
+        <n-button type="primary" @click="updatePasss(inputPass)" :disabled="inputPass.input.password.length < 6">
+          Cập nhật
+        </n-button>
+      </template>
+    </n-modal>
+
   </n-space>
 </template>
 <script lang="ts" setup>
@@ -38,8 +57,9 @@ import {PaginationProps} from "naive-ui/es/pagination/src/Pagination"
 import {DataTableColumns, NButton, NTag} from "naive-ui"
 import {GetUsers, GetUsers_users} from "~/apollo/queries/__generated__/GetUsers"
 import { NuxtLink, LayoutInput } from "#components"
-import {REMOVE_USER} from "~/apollo/mutates/user.mutate";
+import {REMOVE_USER, UPDATE_PASSWORD} from "~/apollo/mutates/user.mutate";
 import {AdminRemoveUser, AdminRemoveUserVariables} from "~/apollo/mutates/__generated__/AdminRemoveUser";
+import {AdminUpdatePassword, AdminUpdatePasswordVariables} from "~/apollo/mutates/__generated__/AdminUpdatePassword";
 
 const router = useRouter()
 
@@ -68,6 +88,21 @@ afterDelete(() => {
   mess.success('Xoá thành công')
   refetch()
 })
+
+
+const { mutate: updatePasss, onDone: afterUpdatePasss } = useMutation<AdminUpdatePassword, AdminUpdatePasswordVariables>(UPDATE_PASSWORD)
+const [showUpdatePass, toggleUpdatePass] = useToggle(false)
+const inputPass = ref<AdminUpdatePasswordVariables>({
+  input: {
+    password: '',
+    user: ''
+  }
+})
+afterUpdatePasss(() => {
+  mess.success('Cập nhật thành công')
+  toggleUpdatePass()
+})
+
 
 const columns = ref<DataTableColumns<GetUsers_users>>([
   {
@@ -182,7 +217,11 @@ const columns = ref<DataTableColumns<GetUsers_users>>([
         }, { default: () => 'Xoá' }),
         h(NButton, {
           type: 'info',
-          onClick: () => {}
+          onClick: () => {
+            inputPass.value.input.user = row.id
+            inputPass.value.input.password = ''
+            toggleUpdatePass()
+          }
         }, { default: () => 'Đổi MK' })
       ]
     })

@@ -11,7 +11,6 @@
               'bg-primary-600': activeBank === item,
               'bg-gray-300': activeBank !== item,
             }"
-            :disabled="activeBank !== 'vcb'"
             @click="activeBank = item"
         >
           {{ item }}
@@ -19,6 +18,14 @@
       </div>
 
       <n-form class="max-w-[400px]">
+
+        <n-form-item label="Trạng thái">
+          <n-switch v-model:value="isSuccess" />
+          <span class="ml-4">
+            Thành công
+          </span>
+        </n-form-item>
+
         <n-form-item label="Số tiền">
           <n-input-number v-model:value="banks[activeBank].config.amount.value" />
         </n-form-item>
@@ -31,14 +38,19 @@
         </n-form-item>
 
         <n-form-item label="Ngân hàng hưởng thụ">
-          <n-input v-model:value="banks[activeBank].config.bank.value" />
+          <n-select
+              v-model:value="banks[activeBank].config.bank.value"
+              :options="bankOptions"
+              placeholder="Chọn ngân hàng hưởng thụ"
+              filterable
+          />
         </n-form-item>
 
         <n-form-item label="Mã giao dịch">
           <n-input v-model:value="banks[activeBank].config.id.value" />
         </n-form-item>
 
-        <n-form-item label="Người chuyển">
+        <n-form-item label="Nội dung">
           <n-input v-model:value="banks[activeBank].config.note.value" />
         </n-form-item>
       </n-form>
@@ -62,6 +74,8 @@
           :image="image"
           :class="{
              'text-white': activeBank === 'vcb',
+             'text-black': activeBank === 'tech',
+             [activeBank]: true
           }"
       />
     </div>
@@ -71,50 +85,74 @@
 <script lang="ts" setup>
 import { toBlob } from 'html-to-image'
 import download from 'downloadjs'
-import {BankConfig, BankCreatorProps, BankFields} from "~/entities/creator.entity"
+import {BankCreatorProps} from "~/entities/creator.entity"
+import {IBank} from "~/entities/bank.entity";
+import {SelectMixedOption} from "naive-ui/es/select/src/interface";
+
+const res = await useFetch<{
+  data: IBank[]
+}>('https://api.vietqr.io/v2/banks')
+const vnBanks = computed(() => res.data.value?.data || [])
+// covert to comlumns
+const bankOptions = computed<SelectMixedOption[]>(() => {
+  return vnBanks.value.map((item: any) => {
+    return {
+      label: item.shortName,
+      value: String(item.name)
+    }
+  })
+})
 
 const banks = reactive<Record<string, BankCreatorProps>>({
   vcb: {
-    image: '/images/banks/vcb.jpg',
+    image: ['/images/banks/vcb.jpg', '/images/banks/vcb2.jpg'],
     config: {
       amount: {
         value: 0,
         style: {
-          top: '158px',
+          top: '170px',
           right: '0px',
           left: '0px',
-          textAlign: 'center',
+          justifyContent: 'center',
           color: '#7cc40c',
-          fontSize: '13px',
+          fontSize: '16px',
           fontWeight: 500,
         },
       },
       name: {
         value: '',
         style: {
-          top: '220px',
+          top: '226px',
           right: '10px',
           fontSize: '11px',
           fontWeight: 500,
+          width: '150px',
+          justifyContent: 'flex-end',
+          height: '39px'
         },
       },
       account: {
         value: '',
         style: {
-          top: '260px',
+          top: '265px',
           right: '10px',
           fontSize: '11px',
           fontWeight: 500,
+          width: '150px',
+          height: '38px',
+          justifyContent: 'flex-end',
         },
       },
       bank: {
         value: '',
         style: {
-          top: '301px',
+          top: '303px',
           right: '10px',
+          width: '140px',
+          height: '51px',
           textAlign: 'right',
           fontSize: '11px',
-          maxWidth: '120px',
+          maxWidth: '160px',
           fontWeight: 500,
           lineHeight: 'normal'
         },
@@ -122,128 +160,170 @@ const banks = reactive<Record<string, BankCreatorProps>>({
       id: {
         value: '',
         style: {
-          top: '350px',
+          top: '353px',
           right: '10px',
+          height: '39px',
           textAlign: 'right',
           fontSize: '11px',
-          maxWidth: '120px',
-          fontWeight: 500,
+          maxWidth: '200px',
+          fontWeight: 500
         },
       },
       note: {
         value: '',
         style: {
-          top: '390px',
+          top: '392px',
           right: '10px',
           textAlign: 'right',
           fontSize: '11px',
-          maxWidth: '120px',
+          maxWidth: '160px',
           lineHeight: 'normal',
           fontWeight: 500,
+          height: '50px'
         },
       }
     },
   },
   tech: {
-    image: '/images/banks/tech.jpg',
+    image: ['/images/banks/tech.jpg', '/images/banks/tech2.jpg'],
     config: {
       amount: {
-        value: 0,
+        value: 100000,
         style: {
-          top: '158px',
-          right: '0px',
-          left: '0px',
-          textAlign: 'center',
-          color: '#7cc40c',
-          fontSize: '13px',
-          fontWeight: 500,
+          top: '236px',
+          left: '16px',
+          fontSize: '18px',
+          fontWeight: 600,
         },
       },
       name: {
-        value: '',
+        value: 'Vo Van Nho',
         style: {
-          top: '220px',
-          right: '10px',
-          fontSize: '11px',
-          fontWeight: 500,
-        },
-      },
-      account: {
-        value: '',
-        style: {
-          top: '260px',
-          right: '10px',
-          fontSize: '11px',
-          fontWeight: 500,
-        },
-      },
-      bank: {
-        value: '',
-        style: {
-          top: '301px',
-          right: '10px',
-          textAlign: 'right',
-          fontSize: '11px',
-          maxWidth: '120px',
-          fontWeight: 500,
+          top: '195px',
+          left: '16px',
+          fontSize: '18px',
+          fontWeight: 600,
+          whiteSpace: 'pre-line',
           lineHeight: 'normal'
         },
       },
-      id: {
-        value: '',
+      account: {
+        value: '1013277752',
         style: {
-          top: '350px',
+          top: '265px',
           right: '10px',
+          fontSize: '11px',
+          fontWeight: 500,
+          width: '150px',
+          height: '38px',
+          justifyContent: 'flex-end',
+        },
+      },
+      bank: {
+        value: 'Ngân hàng TMCP Ngoại Thương Việt Nam',
+        style: {
+          top: '298px',
+          left: '16px',
+          right: '16px',
+          fontSize: '11px',
+          fontWeight: 500,
+          lineHeight: 'normal',
+          wordSpacing: '-1.5px',
+          whiteSpace: 'pre-line'
+        },
+      },
+      id: {
+        value: 'FT23065005000338',
+        style: {
+          top: '444px',
+          left: '16px',
+          right: '16px',
           textAlign: 'right',
           fontSize: '11px',
-          maxWidth: '120px',
+          maxWidth: '160px',
+          lineHeight: 'normal',
           fontWeight: 500,
         },
       },
       note: {
-        value: '',
+        value: 'Ly chuyen',
         style: {
-          top: '390px',
-          right: '10px',
+          top: '355px',
+          left: '16px',
+          right: '16px',
           textAlign: 'right',
           fontSize: '11px',
-          maxWidth: '120px',
+          maxWidth: '160px',
           lineHeight: 'normal',
-          fontWeight: 500,
+          fontWeight: 500
         },
       }
     },
   }
 })
 
-const lists = ref(['vcb'])
-const activeBank = ref('vcb')
+const lists = ref(['vcb', 'tech'])
+const activeBank = ref('tech')
 const { $dayjs, $moneyFormat } = useNuxtApp()
 
-const config = ref<BankConfig>(banks[activeBank.value].config)
-
-watch(() => banks[activeBank.value], (value) => {
-  const _config = JSON.parse(JSON.stringify(value.config))
+const config = computed(() => {
+  const _config = JSON.parse(JSON.stringify(banks[activeBank.value].config))
   if(activeBank.value === 'vcb') {
     _config.time = {
       value: $dayjs().format('HH:mm dddd DD/MM/YYYY'),
       style: {
-        top: '183px',
+        top: '195px',
         right: '0px',
         left: '0px',
-        textAlign: 'center',
         textTransform: 'capitalize',
+        justifyContent: 'center',
         color: '#8c959b',
         fontSize: '8px',
         fontWeight: 500
       }
     }
-    _config.amount.value = $moneyFormat(_config.amount.value || 0) + ' VNĐ'
-  }
-  config.value = _config
-}, { deep: true})
+    _config.amount.value = $moneyFormat(_config.amount.value || 0) + ' VND'
+  } else if (activeBank.value === 'tech') {
+    // _config.time = {
+    //   value: $dayjs().format('HH:mm dddd DD/MM/YYYY'),
+    //   style: {
+    //     top: '195px',
+    //     right: '0px',
+    //     left: '0px',
+    //     textTransform: 'capitalize',
+    //     justifyContent: 'center',
+    //     color: '#8c959b',
+    //     fontSize: '8px',
+    //     fontWeight: 500
+    //   }
+    // }
 
-const image = computed(() => banks[activeBank.value].image)
+    // covert to string and group 4 number
+    _config.bank.value = _config.bank.value + '\n' + String(_config.account.value).replace(/(\d{4})/g, '$1 ')
+    delete _config.account
+
+    _config.name.value = (isSuccess.value ? 'Chuyển thành công' : 'Chuyển thất bại') + '\n tới ' + String(_config.name.value).toUpperCase()
+    _config.amount.value = 'VND ' + $moneyFormat(_config.amount.value || 0)
+
+    _config.time = {
+      value: $dayjs().format('D MMMM, YYYY'),
+      style: {
+        top: '400px',
+        left: '16px',
+        right: '16px',
+        textAlign: 'right',
+        fontSize: '11px',
+        maxWidth: '160px',
+        lineHeight: 'normal',
+        fontWeight: 500
+      }
+    }
+  }
+  return _config
+})
+
+const [isSuccess, toggleSuccess] = useToggle(false)
+const image = computed(() => banks[activeBank.value].image[isSuccess.value ? 0 : 1])
 
 
 /**
@@ -283,11 +363,11 @@ const exportImage = async () => {
 
 </script>
 
-<style scoped>
-#name {
-  top: 220px;
-  right: 10px;
+<style>
+._bill_creator.tech ._clock {
+  top: 8px;
+  left: 34px;
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 600;
 }
 </style>

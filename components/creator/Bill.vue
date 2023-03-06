@@ -1,12 +1,12 @@
 <template>
-  <div class="relative">
+  <div class="relative _bill_creator">
 
-    <div class="absolute top-[7px] text-[10px] left-[24px]">
+    <div class="absolute top-[7px] text-[10px] left-[24px] _clock">
       {{ $dayjs().format('HH:mm') }}
     </div>
 
     <div
-        class="absolute"
+        class="absolute flex items-center"
         v-for="(item, key) in config"
         :key="key"
         :style="item.style"
@@ -25,12 +25,6 @@ const props = defineProps<{
   image: string
   config: BankConfig
 }>()
-
-// const els = ref(props.config)
-//
-// watch(() => props.config, (val) => {
-//   els.value = val
-// }, { deep: true })
 </script>
 
 <style scoped></style>

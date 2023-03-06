@@ -10,6 +10,6 @@ export interface BankConfig {
 }
 
 export interface BankCreatorProps {
-    image: string
+    image: string[]
     config: BankConfig
 }

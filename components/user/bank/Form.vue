@@ -52,7 +52,7 @@
         </div>
 
         <div class="relative aspect-w-8 aspect-h-5 mt-4 w-full">
-          <n-image :src="$cdn(identity.front)" alt="" class="w-full h-full object-cover" />
+          <n-image :src="$cdn(identity.back)" alt="" class="w-full h-full object-cover" />
         </div>
 
       </div>

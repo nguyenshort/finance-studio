@@ -15,10 +15,6 @@
       <n-form-item label="Nội dung" path="note">
         <n-input v-model:value="form.note" placeholder="Nội dung giao dịch" type="textarea"/>
       </n-form-item>
-
-      <p v-if="form.amount" class="-mt-3 text-[13px] text-rose-500">
-        Thao tác này sẽ {{ form.amount > 0 ? 'cộng' : 'trừ' }} {{ $moneyFormat(Number(realAmount || 0)) }} VNĐ vào số dư của khách
-      </p>
     </n-form>
 
 
@@ -26,8 +22,11 @@
       <n-button type="error" @click="() => toggle(false)">
         Huỷ
       </n-button>
-      <n-button type="primary" @click="submit">
-        {{ isCreate ? 'Tạo' : 'Cập nhật' }}
+      <n-button type="primary" @click="submit(true)">
+        Cộng Tiền
+      </n-button>
+      <n-button type="primary" @click="submit(false)">
+        Trừ Tiền
       </n-button>
     </template>
   </n-modal>
@@ -45,7 +44,6 @@ import {FormInst} from "naive-ui";
 import {AdminUpdateLogbook, AdminUpdateLogbookVariables} from "~/apollo/mutates/__generated__/AdminUpdateLogbook";
 
 const [show, toggle] = useToggle(false)
-const [isCreate, toggleCreate] = useToggle(true)
 
 const form = ref<Omit<CreateLogbookInput, 'user'> | UpdateLogbookInput>({
   amount: 0,
@@ -55,7 +53,6 @@ const form = ref<Omit<CreateLogbookInput, 'user'> | UpdateLogbookInput>({
 const realAmount = computed(() => form.value.amount! * 1000000)
 
 const { mutate: createLogbook } = useMutation<AdminCreateLogbook, AdminCreateLogbookVariables>(CREATE_LOGBOOK)
-const { mutate: updateLogbook } = useMutation<AdminUpdateLogbook, AdminUpdateLogbookVariables>(UPDATE_LOGBOOK)
 
 
 const rules = ref<FormRules>({
@@ -89,61 +86,24 @@ const newLogbook = async () => {
   }
 }
 
-const updateLogbookHandle = async () => {
-  try {
-    const _form = form.value as UpdateLogbookInput
-    updateLogbook({
-      input: {
-        amount: realAmount.value,
-        note: _form.note,
-        id: _form.id
-      }
-    })
-  } catch (e) {
-    //
-  }
-}
-
 const bus2 = useEventBus<string>('logbooks')
-const submit = () => {
+const submit = (inc: boolean) => {
   formRef.value?.validate(async (errors) => {
     if (errors) {
       throw new Error('Form is not valid')
     }
-
-    if (isCreate.value) {
-      await newLogbook()
-    } else {
-      await updateLogbookHandle()
-    }
-
+    form.value.amount = inc ? Math.abs(form.value.amount!) : -Math.abs(form.value.amount!)
+    await newLogbook()
     toggle(false)
     bus2.emit('refresh')
   })
 }
 
 const bus = useEventBus<string, (UpdateLogbookInput | undefined )>('modify-logbook')
-bus.on((event: string, payload) => {
-  if(event === 'new') {
-    toggleCreate(true)
-    form.value = {
-      amount: 0,
-      note: ''
-    }
-  } else if(event === 'add') {
-    toggleCreate(true)
-    form.value = {
-      amount: 0,
-      note: ''
-    }
-  } else if (event === 'subtract') {
-    toggleCreate(true)
-    form.value = {
-      amount: 0,
-      note: ''
-    }
-  } else {
-    toggleCreate(false)
+bus.on(() => {
+  form.value = {
+    amount: 0,
+    note: ''
   }
   toggle(true)
 })

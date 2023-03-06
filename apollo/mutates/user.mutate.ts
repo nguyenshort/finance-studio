@@ -127,3 +127,11 @@ export const TOGGLE_WITHDRAW = gql`
     }
   }
 `
+
+export const REMOVE_USER = gql`
+  mutation AdminRemoveUser($input: AdminRemoveUserInput!) {
+    adminRemoveUser(input: $input) {
+      id
+    }
+  }
+`

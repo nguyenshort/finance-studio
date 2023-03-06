@@ -52,6 +52,10 @@ export interface AdminGetLogbooksFilter {
   user?: string | null;
 }
 
+export interface AdminRemoveUserInput {
+  user: string;
+}
+
 export interface AdminUpdateUserInput {
   avatar?: string | null;
   balance?: number | null;

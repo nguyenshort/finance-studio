@@ -48,6 +48,10 @@ input AdminGetLogbooksFilter {
   user: ID
 }
 
+input AdminRemoveUserInput {
+  user: ID!
+}
+
 input AdminUpdateUserInput {
   avatar: String
   balance: Float
@@ -149,11 +153,6 @@ input GetLoanFilter {
   user: ID!
 }
 
-input GetLogbooksFilter {
-  status: [LOGBOOK_STATUS!] = [PENDING, APPROVED, REJECTED]
-  type: [LOGBOOK_TYPE!] = [ADD, SUBTRACT]
-}
-
 input GetUserFilter {
   id: ID!
 }
@@ -243,10 +242,12 @@ enum LOGBOOK_TYPE {
 type Mutation {
   adminCreateLogbook(input: CreateLogbookInput!): Logbook!
   adminDeleteLogbook(input: DeleteLogbookInput!): Logbook!
+  adminRemoveUser(input: AdminRemoveUserInput!): User!
   adminUpdateBank(input: UpdateBankInput!): Bank!
   adminUpdateInfo(input: UpdateInfoInput!): Info!
   adminUpdateLoan(input: UpdateLoanInput!): Loan!
   adminUpdateLogbook(input: UpdateLogbookInput!): Logbook!
+  adminUpdatePassword(input: UpdatePasswordUserInput!): User!
   adminUpdateUser(input: AdminUpdateUserInput!): User!
   createBank(input: CreateBankInput!): Bank!
   createCollaborator(input: CreateCollaboratorInput!): Collaborator!
@@ -291,7 +292,7 @@ type Query {
   info: Info
   language(id: Int!): Language!
   loan: Loan
-  logbooks(filter: GetLogbooksFilter!): [Logbook!]!
+  logbooks: [Logbook!]!
   me: User!
   users: [User!]!
   withdraws: [Withdraw!]!
@@ -379,6 +380,11 @@ input UpdateLogbookInput {
   id: ID!
   note: String = ""
   user: ID
+}
+
+input UpdatePasswordUserInput {
+  password: String!
+  user: ID!
 }
 
 type User {

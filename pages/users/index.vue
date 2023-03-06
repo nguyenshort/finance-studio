@@ -38,6 +38,8 @@ import {PaginationProps} from "naive-ui/es/pagination/src/Pagination"
 import {DataTableColumns, NButton, NTag} from "naive-ui"
 import {GetUsers, GetUsers_users} from "~/apollo/queries/__generated__/GetUsers"
 import { NuxtLink, LayoutInput } from "#components"
+import {REMOVE_USER} from "~/apollo/mutates/user.mutate";
+import {AdminRemoveUser, AdminRemoveUserVariables} from "~/apollo/mutates/__generated__/AdminRemoveUser";
 
 const router = useRouter()
 
@@ -54,14 +56,18 @@ const reset = () => {
   filter.email = ''
 }
 
-const { result, loading } = useQuery<GetUsers>(GET_USERS)
-const users = computed<GetUsers_users[]>(() => (result.value?.users || [])
-    .filter(user => user.info?.name?.includes(filter.name))
-    .filter(user => user.info?.cccd?.includes(filter.cccd))
-    .filter(user => user.email?.includes(filter.email))
-)
+const { result, loading, refetch } = useQuery<GetUsers>(GET_USERS)
+const users = computed<GetUsers_users[]>(() => (result.value?.users || []))
 const getRowKey = (user: GetUsers_users) => user.id
 const { $dayjs } = useNuxtApp()
+
+const mess = useMessage()
+
+const { mutate: removeUser, onDone: afterDelete } = useMutation<AdminRemoveUser, AdminRemoveUserVariables>(REMOVE_USER)
+afterDelete(() => {
+  mess.success('Xoá thành công')
+  refetch()
+})
 
 const columns = ref<DataTableColumns<GetUsers_users>>([
   {
@@ -152,6 +158,7 @@ const columns = ref<DataTableColumns<GetUsers_users>>([
   {
     title: 'Ngày Tham Gia',
     key: 'createdAt',
+    width: 150,
     render: (row) => h('span', {
       onClick: () => router.push('/users/' + row.id)
     }, { default: () => $dayjs(row.createdAt).format('DD/MM/YYYY') }),
@@ -160,12 +167,25 @@ const columns = ref<DataTableColumns<GetUsers_users>>([
   {
     title: 'Hành Động',
     key: 'action',
-    render: (row) => h(NButton, {
-      type: 'info',
-      onClick: () => {
-
-      }
-    }, { default: () => 'Đổi Mật Khẩu' })
+    width: 100,
+    render: (row) => h('div', {
+      class: 'flex'
+    }, {
+      default: () => [
+        h(NButton, {
+          type: 'error',
+          onClick: () => removeUser({
+            input: {
+              user: row.id
+            }
+          })
+        }, { default: () => 'Xoá' }),
+        h(NButton, {
+          type: 'info',
+          onClick: () => {}
+        }, { default: () => 'Đổi MK' })
+      ]
+    })
   }
 ])
 const pagination = reactive<PaginationProps>({

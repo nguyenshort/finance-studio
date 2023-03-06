@@ -325,6 +325,7 @@ type Subscription {
 
 input ToggleWithdrawInput {
   id: ID!
+  status: WithDrawStatus!
 }
 
 input UpdateBankInput {

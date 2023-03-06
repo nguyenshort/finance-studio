@@ -275,7 +275,8 @@ const submitCollaborator = (): AdminUpdateUserInput => {
 const submit = async () => {
   return Promise.all([
     submitLoan(),
-    submitCollaborator()
+    submitCollaborator(),
+    submitWithdraw()
   ])
 }
 

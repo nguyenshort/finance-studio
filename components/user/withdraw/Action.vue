@@ -3,8 +3,8 @@
     <n-button
         type="error"
         size="small"
-        :disabled="loading || !isApprove"
-        @click="toggle"
+        :disabled="loading || logbook.status === 'REJECTED'"
+        @click="toggle(WithDrawStatus.REJECTED)"
     >
       Từ Chối
     </n-button>
@@ -13,8 +13,8 @@
     <n-button
         type="info"
         size="small"
-        :disabled="loading || isApprove"
-        @click="toggle"
+        :disabled="loading || logbook.status === 'APPROVED'"
+        @click="toggle(WithDrawStatus.APPROVED)"
     >
       Duyệt
     </n-button>
@@ -23,7 +23,7 @@
 
 <script lang="ts" setup>
 import {TOGGLE_WITHDRAW} from "~/apollo/mutates/user.mutate";
-import {UpdateLogbookInput} from "~/apollo/__generated__/serverTypes";
+import {UpdateLogbookInput, WithDrawStatus} from "~/apollo/__generated__/serverTypes";
 import {WithdrawsAdmin_withdrawsAdmin} from "~/apollo/queries/__generated__/WithdrawsAdmin";
 import {ToggleWithdraw, ToggleWithdrawVariables} from "~/apollo/mutates/__generated__/ToggleWithdraw";
 
@@ -35,9 +35,10 @@ const isApprove = computed(() => props.logbook.status === 'APPROVED')
 
 const { mutate: deleteLogBook, loading, onDone: afterDelete } = useMutation<ToggleWithdraw, ToggleWithdrawVariables>(TOGGLE_WITHDRAW)
 
-const toggle = async () => deleteLogBook({
+const toggle = async (status: WithDrawStatus) => deleteLogBook({
   filter: {
-    id: props.logbook.id
+    id: props.logbook.id,
+    status
   }
 })
 const logBookBus = useEventBus<string>('logbooks')

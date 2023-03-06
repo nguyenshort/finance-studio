@@ -123,6 +123,7 @@ export interface SignUpInput {
 
 export interface ToggleWithdrawInput {
   id: string;
+  status: WithDrawStatus;
 }
 
 export interface UpdateBankInput {

@@ -116,7 +116,7 @@ const status = computed(() => dataStatus.value?.adminLoan?.status)
 interface FormRef<T> {
   submit: () => Promise<T>
 }
-interface FormLoanRef extends FormRef<[UpdateLoanInput, AdminUpdateUserInput]> {
+interface FormLoanRef extends FormRef<[UpdateLoanInput, AdminUpdateUserInput, AdminUpdateUserInput]> {
   quickApprove: () => Promise<void>
 }
 
@@ -141,6 +141,7 @@ const submit = async () => {
       input1: loan[0],
       input2: {
         ...loan[1],
+        ...loan[2],
         /// ...bank[1]
       },
       input3: bank[0],

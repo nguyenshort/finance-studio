@@ -78,15 +78,11 @@ const writeToken = async (token: string, notify: string) => {
         token
       })
     })
-    // showNotify({
-    //   type: 'success',
-    //   message: notify
-    // })
-
     setTimeout(() => {
       window.location.href = '/'
     }, 500)
   } catch (e) {
+    message.error('Đăng nhập thất bại')
     //
   }
 }
@@ -105,6 +101,7 @@ const authHandle = async () => {
       await writeToken(res?.data?.signIn, 'Đăng Nhập Thành Công')
     }
   } catch (e) {
+    message.error('Số điện thoại hoặc mật khẩu không đúng')
   }
 }
 const onSubmit = async () => {

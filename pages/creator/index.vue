@@ -108,7 +108,7 @@ const banks = reactive<Record<string, BankCreatorProps>>({
     image: ['/images/banks/vcb.jpg', '/images/banks/vcb2.jpg'],
     config: {
       amount: {
-        value: 0,
+        value: 12000000,
         style: {
           top: '170px',
           right: '0px',
@@ -120,7 +120,7 @@ const banks = reactive<Record<string, BankCreatorProps>>({
         },
       },
       name: {
-        value: '',
+        value: 'TRAN VAN TEO',
         style: {
           top: '226px',
           right: '10px',
@@ -144,17 +144,19 @@ const banks = reactive<Record<string, BankCreatorProps>>({
         },
       },
       bank: {
-        value: '',
+        value: 'Ngân hàng TMCP Quân đội',
         style: {
           top: '303px',
           right: '10px',
           width: '140px',
           height: '51px',
-          textAlign: 'right',
+          justifyContent: 'flex-end',
           fontSize: '11px',
           maxWidth: '160px',
           fontWeight: 500,
-          lineHeight: 'normal'
+          lineHeight: 'normal',
+          whiteSpace: 'pre-line',
+          textAlign: 'right'
         },
       },
       id: {
@@ -262,8 +264,10 @@ const banks = reactive<Record<string, BankCreatorProps>>({
   }
 })
 
+const currentBank = computed(() => vnBanks.value.find((item: any) => item.name === banks[activeBank.value].config.bank.value))
+
 const lists = ref(['vcb', 'tech'])
-const activeBank = ref('tech')
+const activeBank = ref('vcb')
 const { $dayjs, $moneyFormat } = useNuxtApp()
 
 const config = computed(() => {
@@ -282,22 +286,20 @@ const config = computed(() => {
         fontWeight: 500
       }
     }
+    if(currentBank.value) {
+      // find all TMCP and remove and capitalize
+      // remove Việt Nam in last
+      const _bank = currentBank.value?.name.replace(/\s(TMCP)\s/g, ' ')
+          .split(' ')
+          .map((item: string) => item.charAt(0).toUpperCase() + item.slice(1))
+          .join(' ')
+          .replace('Hàng', 'hàng')
+          .replace(/Việt Nam$/, '')
+
+      _config.bank.value = _bank + `\n(${currentBank.value?.code})`
+    }
     _config.amount.value = $moneyFormat(_config.amount.value || 0) + ' VND'
   } else if (activeBank.value === 'tech') {
-    // _config.time = {
-    //   value: $dayjs().format('HH:mm dddd DD/MM/YYYY'),
-    //   style: {
-    //     top: '195px',
-    //     right: '0px',
-    //     left: '0px',
-    //     textTransform: 'capitalize',
-    //     justifyContent: 'center',
-    //     color: '#8c959b',
-    //     fontSize: '8px',
-    //     fontWeight: 500
-    //   }
-    // }
-
     // covert to string and group 4 number
     _config.bank.value = _config.bank.value + '\n' + String(_config.account.value).replace(/(\d{4})/g, '$1 ')
     delete _config.account

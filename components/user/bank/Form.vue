@@ -37,25 +37,18 @@
     </n-form>
 
     <n-image-group class="w-full">
-      <div v-if="identity" class="flex">
-      <div class="w-1/3 pr-4">
-
-        <div class="relative aspect-w-3 aspect-h-4">
+      <div v-if="identity" class="flex -mx-1.5">
+        <div class="w-1/3 px-1.5">
           <n-image :src="$cdn(identity.avatar)" alt="" class="w-full h-full object-cover" />
         </div>
 
-      </div>
-      <div class="w-2/3">
-
-        <div class="relative aspect-w-8 aspect-h-5 w-full">
+        <div class="w-1/3 px-1.5">
           <n-image :src="$cdn(identity.front)" alt="" class="w-full h-full object-cover" />
         </div>
 
-        <div class="relative aspect-w-8 aspect-h-5 mt-4 w-full">
+        <div class="w-1/3 px-1.5">
           <n-image :src="$cdn(identity.back)" alt="" class="w-full h-full object-cover" />
         </div>
-
-      </div>
     </div>
     </n-image-group>
 

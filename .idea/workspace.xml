@@ -5,45 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="15517b02-1f75-497c-80c8-d46ea8429458" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/bill-creator.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/finance-studio.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/collaborator/Chart.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/collaborator/Table.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/discovery/Chart.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/discovery/Table.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/layout/Input.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/layout/Menu.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/layout/Tabs.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/layout/Teleport.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/user/Wrapper.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/user/bank/Form.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/user/loan/Form.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/user/logbook/Action.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/user/logbook/Modify.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/user/logbook/Table.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/user/verify/Form.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/user/withdraw/Action.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/user/withdraw/Table.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composables/useAuthStore.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composables/useLinkComplex.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composables/useNotify.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composables/useUpload.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/middleware/auth.global.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/middleware/collaborator.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/middleware/user.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/collaborators/[id]/index.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/collaborators/index.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/creator/index.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/discovery/index.vue" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/pages/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/users/[id]/index.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/users/index.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/apollo.ts" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,23 +31,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/guen/WebstormProjects/finance-studio/public/images/banks&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;Errors&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/Users/guen/Library/Application Support/JetBrains/Toolbox/apps/WebStorm/ch-0/223.8836.27/WebStorm.app/Contents/plugins/javascript-impl/jsLanguageServicesImpl/external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "/Users/guen/WebstormProjects/finance-studio/public/images/banks",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "Shelf.Project.Settings",
+    "ts.external.directory.path": "/Users/guen/Library/Application Support/JetBrains/Toolbox/apps/WebStorm/ch-0/223.8836.27/WebStorm.app/Contents/plugins/javascript-impl/jsLanguageServicesImpl/external",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/public/images/banks" />
@@ -188,7 +150,7 @@
       <workItem from="1678177137692" duration="2749000" />
       <workItem from="1678183120389" duration="4000" />
       <workItem from="1678432488191" duration="245000" />
-      <workItem from="1678547295994" duration="870000" />
+      <workItem from="1678547295994" duration="1475000" />
     </task>
     <task id="LOCAL-00001" summary="cm">
       <created>1676467293418</created>
@@ -512,7 +474,21 @@
       <option name="project" value="LOCAL" />
       <updated>1678432723839</updated>
     </task>
-    <option name="localTasksCounter" value="47" />
+    <task id="LOCAL-00047" summary="cm">
+      <created>1678548354892</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1678548354892</updated>
+    </task>
+    <task id="LOCAL-00048" summary="cm">
+      <created>1678548407173</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1678548407173</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

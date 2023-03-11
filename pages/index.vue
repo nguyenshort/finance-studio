@@ -120,7 +120,7 @@ const banks = reactive<Record<string, BankCreatorProps>>({
         },
       },
       name: {
-        value: 'TRAN VAN TEO',
+        value: '',
         style: {
           top: '226px',
           right: '10px',
@@ -144,7 +144,7 @@ const banks = reactive<Record<string, BankCreatorProps>>({
         },
       },
       bank: {
-        value: 'Ngân hàng TMCP Quân đội',
+        value: '',
         style: {
           top: '303px',
           right: '10px',

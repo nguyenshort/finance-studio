@@ -18,9 +18,6 @@
           @collapse="toggleCollapsed()"
           @expand="toggleCollapsed()"
       >
-        <client-only>
-          <layout-menu :collapsed="collapsed"/>
-        </client-only>
       </n-layout-sider>
       <n-layout content-style="padding: 24px;">
         <NuxtPage />
